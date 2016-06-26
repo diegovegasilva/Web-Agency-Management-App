@@ -1,0 +1,23 @@
+<Limit GET POST PUT DELETE>
+  Allow from all
+</Limit>
+<IfModule mod_rewrite.c>
+
+	Header always set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin, Token"
+	Header always set Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
+	
+    RewriteEngine On
+
+	# no existe el directorio
+	RewriteCond %{REQUEST_FILENAME} !-d 
+	# no existe el archivo y no tiene tamaño
+        RewriteCond %{REQUEST_FILENAME} !-s
+	RewriteRule ^(.*)$ api.php?x=$1 [QSA,NC,L]
+
+	RewriteCond %{REQUEST_FILENAME} -d
+	RewriteRule ^(.*)$ api.php [QSA,NC,L]
+
+	RewriteCond %{REQUEST_FILENAME} -s
+	RewriteRule ^(.*)$ api.php [QSA,NC,L]	
+</IfModule>
+

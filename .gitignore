@@ -1,3 +1,4 @@
 nbproject
-webservice
+webservice/connection.php
+webservice/error_log.php
 fiadeiro_app.sql
