@@ -1,0 +1,111 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Listado de Gastos</h2>
+    </div>
+    <div class="widget-content">
+        <table class="table form">
+            <thead>
+                <tr>
+                    <th class="align-left">Fecha <a class="sort" ng-click="predicate = 'date'; reverse = !reverse"></a></th>
+                    <th class="align-left">Nombre <a class="sort" ng-click="predicate = 'name'; reverse = !reverse"></a></th>
+                    
+                    <th class="align-left">Usuario <a class="sort" ng-click="predicate = 'username'; reverse = !reverse"></a></th>
+                    <th ng-if="state=='listadoGastosRecurrentes'" class="align-left">Frecuencia<a class="sort" ng-click="predicate = 'frequencyName'; reverse = !reverse"></a></th>
+                    <th class="align-left">Importe <a class="sort" ng-click="predicate = 'amount'; reverse = !reverse"></a></th>
+                    <th style="width:20%; min-width: 180px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='exp in expenses | orderBy:predicate:reverse track by exp.id'>
+                    <td class="align-left" ng-bind="exp.date | date:'dd/MM/yyyy'"></td>
+                    <td class="align-left" ng-bind="exp.name"></td>
+                    
+                    <td class="align-left" ng-bind="exp.username"></td>
+                    <td ng-if="state=='listadoGastosRecurrentes'" class="align-left" ng-bind="exp.frequencyName"></td>
+                    <td class="align-left" ng-bind="exp.amount"></td>
+                    <td style="width:20%; min-width: 60px;">
+                         <button type="button" class="btn edit-small" title="editar gasto" ng-click="editExpenses(exp.id)" ng-if="['0', '1'].indexOf(userRol) > -1"></button> 
+                        <button type="button" class="btn delete-small" title="eliminar gasto" ng-click="deleteExpenses(exp.id)" ng-if="['0', '1'].indexOf(userRol) > -1"></button> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+</div>
+<script type="text/ng-template" id="deleteExpensesModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+        <p>¿Estas seguro de borrar este gasto?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn-material" ng-click="cancel()">cancelar</button>
+        <button class="btn-material btn-primary" ng-click="delete(expensesID)">Borrar</button>    
+    </div>
+</script>
+<script type="text/ng-template" id="editExpensesModal.html">
+    <div class="modal-header">
+            <h3 class="modal-title">Editar Gastos</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form edit-form" name="editExpensesForm" novalidate>
+            <ul>
+                <li>
+                    <p class="section-label">Nombre</p>
+                    <input type="text" name="name" placeholder="Introduce nombre" required ng-model="expense.name"/>
+                    <div class="error" ng-messages="editExpensesForm.name.$error" ng-if="editExpensesForm.name.$dirty">
+                            <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Importe</p>
+                    <input type="number" name="amount" placeholder="Introduce importe" required ng-model="expense.amount" step='0.25' min="0"/>
+                    <div class="error" ng-messages="editExpensesForm.amount.$error" ng-if="editExpensesForm.amount.$dirty">
+                            <p class="error" ng-message="required">El importe es obligatorio.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Usuario</p>
+                    <ui-select required ng-model="selected.value"  append-to-body="true">
+                        <ui-select-match placeholder="- selecciona usuario -">
+                            <span ng-bind="$select.selected.username"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="user in (users | filter: $select.search) track by user.id">
+                            <span ng-bind="user.username"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="error" ng-messages="editExpensesForm.user.$error" ng-if="editExpensesForm.user.$dirty">
+                        <p class="error" ng-message="required">Selecciona un usuario.</p>
+                    </div>
+                </li>
+            <li ng-if="state=='listadoGastosRecurrentes'">
+                <p class="section-label">Frecuencia</p>
+                <select name="province" required ng-options="item.id as item.name for item in frequency" ng-model="expense.frequency">
+                    <option disabled selected value="">- selecciona frecuencia -</option>
+                </select>
+                <div class="error" ng-messages="editExpensesForm.frequency.$error" ng-if="editExpensesForm.frequency.$dirty">
+                    <p class="error" ng-message="required">La frecuencia es obligatoria.</p>
+                </div>
+            </li>
+             <li>
+                    <p class="section-label">Fecha</p>
+                    <input type="date" name="date" ng-model="expense.date" required/>
+                    <div class="error" ng-messages="editExpensesForm.date.$error" ng-if="editExpensesForm.date.$dirty">
+                        <p class="error" ng-message="required">La fecha es obligatoria.</p>
+                    </div>
+                </li>
+
+            </ul>
+        </form>
+    </div>
+    <div class="modal-footer">
+            <button class="btn-material" ng-click="cancel()">Cancelar</button>
+            <button class="btn-material btn-primary" ng-disabled='editExpensesForm.$invalid' ng-click="edit(expense)">Editar</button>
+    </div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>

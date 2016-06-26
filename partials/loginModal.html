@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h3 class="modal-title">Acceso usuarios</h3>
+</div>
+<div class="modal-body">
+    <form class="form edit-form" name="loginForm" novalidate>
+        <ul class="overflowHidden">
+            <li>
+                <p class="section-label">Usuario</p>
+                <input type="text" name="username" placeholder="Introduce usuario" required ng-model="login.username"/>
+                <div class="error" ng-messages="loginForm.username.$error" ng-if="loginForm.username.$dirty">
+                    <p class="error" ng-message="required">El usuario es obligatorio.</p>
+                </div>
+            </li>
+            <li>
+                <p class="section-label">Contraseña</p>
+                <input type="password" name="password" placeholder="Introduce contraseña" required ng-model="login.password"/>
+                <div class="error" ng-messages="loginForm.password.$error" ng-if="loginForm.password.$dirty">
+                    <p class="error" ng-message="required">La contraseña es obligatoria.</p>
+                </div>
+
+            </li>
+        </ul>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-disabled='loginForm.$invalid' ng-click="submit()">Log in</button>
+</div>

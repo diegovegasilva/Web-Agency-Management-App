@@ -1,0 +1,83 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Listado de facturas <a ui-sref="clientesDetalle({clientID:clientID})" ng-if="clientID" ng-bind="'de '+clientName"></a></h2>
+    </div>
+    <div class="widget-content">
+        <table class="table form">
+            <thead>
+                <tr>
+                    <th ng-hide="type == 0" class="align-left">Nº<a class="sort" ng-click="predicate = 'id'; reverse = !reverse"></a></th>
+                    <th>Fecha<a class="sort" ng-click="predicate = 'date'; reverse = !reverse"></a></th>
+                    <th ng-if='!clientID && !orderID'>Cliente<a class="sort" ng-click="predicate = 'client_name'; reverse = !reverse"></a></th>
+                    <th>Importe<a class="sort" ng-click="predicate = 'price'; reverse = !reverse"></a></th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="noResults" ng-if="noResults">
+                    <td class="align-left" colspan="5"><label>No se ha encontrado ningúna factura</label></td>
+                </tr>
+                <tr ng-repeat="invoice in invoices| orderBy:predicate:reverse track by invoice.id">
+                    <td class="align-left" ng-hide="type == 0">
+                        <label ng-bind='invoice.invoice_num'></label>
+                    </td>
+                    <td>	
+                        <label ng-if="invoice.date">{{invoice.date | date:'dd/MM/yyyy'}}</label>
+                        <label ng-if="!invoice.date">-</label>
+                    </td>
+                    <td ng-if='!clientID && !orderID'>	
+                        <label ><a ui-sref="clientesDetalle({clientID:invoice.client_id})" ng-bind='invoice.client_name'></a></label>
+                    </td>
+                    <td>	
+                        <label ng-bind='invoice.subTotal'></label>
+                    </td>
+                    <td>	
+                        <label ng-class="switchClass(invoice.status_name)" ng-bind='invoice.status_name'></label>
+                    </td>
+                    <td>
+                         <a class="btn detail-small" title="ver factura" ui-sref="facturasDetalle({invoiceID:invoice.id})" ng-if="['0', '1', '3', '4'].indexOf(userRol) > -1"></a>
+                        <button type="button" class="btn send-small" title="emitir factura" ng-click="changeStatus(invoice.id,invoice.status)" ng-if="['0', '1', '4'].indexOf(userRol) > -1 && invoice.status == 0 "></button> 
+                        <button type="button" class="btn pay-small" title="pagar factura" ng-click="changeStatus(invoice.id,invoice.status)" ng-if="['0', '1', '4'].indexOf(userRol) > -1 && invoice.status == 1 "></button> 
+                       
+                        <button type="button" class="btn delete-small" title="eliminar factura" ng-click="deleteInvoice(invoice.id)" ng-if="['0', '1', '4'].indexOf(userRol) > -1"></button> 
+                    </td>            
+                </tr>
+            </tbody>
+        </table>
+        <pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+</div>
+<script type="text/ng-template" id="deleteInvoiceModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar esta factura?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material btn-primary" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material" ng-click="delete(invoiceID)">Borrar</button>
+    
+    </div>
+</script>
+<script type="text/ng-template" id="invoiceChangeStatusModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p ng-if="status == 0">¿Estas seguro de marcar esta factura como emitida?, esta acción no puede deshacerse</p>
+    <p ng-if="status == 1">¿Estas seguro de marcar esta factura como pagada?, esta acción no puede deshacerse</p>
+    <p></p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material btn-primary" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material" ng-click="change()">Confirmar</button>
+    
+    </div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+

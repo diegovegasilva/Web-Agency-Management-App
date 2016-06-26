@@ -1,0 +1,152 @@
+<div class="row">
+    <div class="widget white-box col-3">
+        <div class="widget-header">
+            <h2>Información del Proyecto</h2>
+        </div>
+        <div class="widget-content">
+            <form class="form" name="editProjectForm" novalidate>
+                <ul class="full-width">
+                    <li>
+                        <p class="section-label">Nombre</p>
+                        <input type="text" name="name" placeholder="Introduce nombre" required ng-model="project.name" input-enable readonly/>
+                        <div class="error" ng-messages="editProjectForm.name.$error" ng-if="editProjectForm.name.$dirty">
+                            <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Fecha de finalización</p>
+                        <input type="date" name="end_date" placeholder="Introduce fecha" required ng-model="project.end_date" input-enable readonly/>
+                        <div class="error" ng-messages="editProjectForm.end_date.$error" ng-if="editProjectForm.end_date.$dirty">
+                            <p class="error" ng-message="required">La fecha de finalización es obligatoria.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Horas presupuestadas</p>
+                        <input type="number" name="hours_budget" placeholder="Introduce horas" required ng-model="project.hours_budget" min="0" step="0.25" input-enable readonly/>
+                        <div class="error" ng-messages="editProjectForm.hours_budget.$error" ng-if="editProjectForm.hours_budget.$dirty">
+                            <p class="error" ng-message="required">La horas presupuestadas son obligatorias.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Estado</p>
+                        <input type="checkbox" ng-model="project.status" ng-checked="project.status == 1" ng-true-value="1" ng-false-value="0" ng-disabled="['0', '1', '2'].indexOf(userRol) < 0">
+                        <label class="switch-label" for="active" ng-bind="project.status == 0 ? 'Cerrada' : 'Abierta'"></label>
+                        <button type="button" class="switch" ng-class="project.status == 1 ? 'active' : ''" ng-model="project.status" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-disabled="['0', '1', '2'].indexOf(userRol) < 0"></button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <div class="widget white-box col-9">
+        <div class="widget-header">
+            <h2>Listado de Tareas</h2>
+        </div>
+        <div class="widget-content">
+            <div class="overflow-list-header">
+                <table class="table noMargin">
+                    <thead>
+                        <tr>
+                            <th style="width:15%; min-width: 100px;" class="align-left">Fecha<a class="sort" ng-click="predicate = 'date'; reverse = !reverse"></a></th>
+                            <th style="width:20%;" class="align-left">Nombre<a class="sort" ng-click="predicate = 'name'; reverse = !reverse"></th>
+                            <th style="width:15%;" class="align-left">Asignada<a class="sort" ng-click="predicate = 'assigned'; reverse = !reverse"></th>
+                            <th style="width:10%; min-width: 65px;" class="align-left">Estado<a class="sort" ng-click="predicate = 'status'; reverse = !reverse"></th>
+                            <th style="width:10%;">H. Presp<a class="sort" ng-click="predicate = 'hours_budget'; reverse = !reverse"></th>
+                            <th style="width:10%;" class="align-left">H. Cons<a class="sort" ng-click="predicate = 'hours_cons'; reverse = !reverse"></th>
+                            <th style="width:20%; min-width: 180px;">Acciones</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="overflow-list">
+                <table class="table form">
+                    <tbody>
+                        <tr ng-repeat='task in tasks| orderBy:predicate:reverse track by task.id'>
+                            <td style="width:15%; min-width: 100px;" class="align-left"><label class="name" ng-bind="task.date | date:'dd/MM/yyyy'"></label></td>
+                            <td style="width:20%;" class="align-left"><a class="name" ng-bind="task.name" ui-sref="tareaDetalle({taskID:task.id})"></a></td>
+                            <td style="width:15%;" class="align-left"><a class="name" ng-bind="task.assignedName" ui-sref="usuariosDetalle({userID:task.assigned})"></a></td>
+                            <td style="width:10%; min-width:65px;" class="align-left"><a ng-click="changeStatus(task.id, task.status)" class="name" ng-bind="task.status == 0 ? 'cerrada' : 'abierta'" ng-class="{'closed' : task.status == 0}"></a></td>
+                            <td style="width:10%;" ng-bind="task.hours_budget"></td>
+                            <td style="width:10%;"><span ng-bind="task.hours_cons > 0 ? task.hours_cons : '0.00'" ng-class="task.hours_cons > task.hours_budget ? 'label-danger' : ''"></span> </td>
+                            <td style="width:20%; min-width: 180px;">
+                                <a class="btn detail-small" title="ver tarea" ui-sref="tareaDetalle({taskID:task.id})" ></a>
+                                <button type="button" class="btn hours-small" title="apuntar horas" ng-click="insertTime(task.id)" ng-if="task.status != 0"></button>
+                                <button type="button" class="btn delete-small" title="eliminar tarea" ng-click="deleteTask(task.id)" ng-if="['0', '1'].indexOf(userRol) > -1"></button> 
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="widget-footer">
+            <div class="results">
+                <p>h. pres.: <span ng-bind="project.hours_budget"></span></p>
+                <p ng-class="project.hours_total > project.hours_budget ? 'text-danger' : ''">h. cons.: <span ng-bind="project.hours_total"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box">
+        <div class="widget-content">
+            <div class="botonera">
+                 <button ng-click="deleteProject()"  class="btn-material btn-delete" ng-if="['0', '1'].indexOf(userRol) > -1">Eliminar Proyecto</button>
+                    <button ng-click="editProject()" ng-disabled="originalEditForm() || editProjectForm.$invalid" class="btn-material btn-primary">Editar</button>
+            </div>  
+        </div>
+    </div>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<script type="text/ng-template" id="deleteProjectModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar este proyecto?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-click="delete()">Borrar</button>
+
+    </div>
+</script>
+<script type="text/ng-template" id="deleteTaskModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar esta tarea?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">cancelar</button>
+    <button class="btn-material btn-primary" ng-click="deleteTaskMod(taskID)">Borrar</button>    
+    </div>
+</script>
+<script type="text/ng-template" id="inserTimeModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Apuntar horas</h3>
+    </div>
+    <div class="modal-body">
+    <form class="form edit-form" name="inserTimeForm" novalidate>
+    <ul class="full-width">
+    <li>
+    <p class="section-label">Horas</p>
+    <input type="number" name="hours" placeholder="Introduce horas" ng-model="task.hours" min="0" step="0.25" required/>
+    <div class="error" ng-messages="inserTimeForm.hours.$error" ng-if="inserTimeForm.hours.$dirty">
+    <p class="error" ng-message="required">Las horas son obligatorias.</p>
+    </li>
+    <li>
+    <p class="section-label">Comentarios</p>
+    <textarea name="comments" ng-model="task.comments"></textarea>
+    </li>
+    </ul>
+    </form>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">cancelar</button>
+    <button class="btn-material btn-primary" ng-disabled='inserTimeForm.$invalid' ng-click="insert(task)">Insertar</button>    
+    </div>
+</script>

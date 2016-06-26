@@ -1,0 +1,45 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Listado de usuarios</h2>
+    </div>
+    <div class="widget-content">
+<table class="table form">
+	<thead>
+    	<tr>
+        	<th class="align-left">Nombre</th>
+            <th class="align-left">Tipo</th>
+            <th  style="width:20%;">Acciones</th>
+        </tr>
+    </thead>
+	<tbody>
+    	<tr ng-repeat="user in users | orderBy : 'userRol'">
+        	<td class="align-left"><a class="name" ng-bind="user.username" ui-sref="usuariosDetalle({userID:user.id})"></a></td>
+            <td class="align-left" ng-bind="user.rol">
+            	 
+            </td>
+            <td style="width:20%;">
+            	 <a class="btn detail-small" title="ver usuario" ui-sref="usuariosDetalle({userID:user.id})" ></a>
+                 <button type="button" class="btn delete-small" title="eliminar usuario" ng-click="deleteUser(user.id)"></button> 
+            </td>
+        </tr>
+    </tbody>
+</table>
+<pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+</div>
+<script type="text/ng-template" id="deleteUserModal.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Atención!!</h3>
+	</div>
+	<div class="modal-body">
+		<p>¿Estas seguro de borrar este usuario?</p>
+	</div>
+	<div class="modal-footer">
+            <button class="btn-material" ng-click="cancel()">cancelar</button>
+            <button class="btn-material btn-primary" ng-click="delete(userID)">Borrar</button>
+	</div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>

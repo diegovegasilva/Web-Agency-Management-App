@@ -1,0 +1,79 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Crear cliente</h2>
+    </div>
+    <div class="widget-content">
+        <form class="form edit-form" name="addClientForm" novalidate>
+            <ul>
+                <li>
+                    <p class="section-label">Nombre</p>
+                    <input type="text" name="name" placeholder="Introduce nombre" required ng-model="client.name"/>
+                    <div class="error" ng-messages="addClientForm.name.$error" ng-if="addClientForm.name.$dirty">
+                        <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                    </div>
+                </li>
+                
+                <li>
+                    <p class="section-label">CIF</p>
+                    <input type="text" name="cif"  placeholder="Introduce CIF" ng-minlength=9 required ng-model="client.cif"/>
+                    <div class="error" ng-messages="addClientForm.cif.$error" ng-if="addClientForm.cif.$dirty">
+                        <p class="error" ng-message="minlength">CIF incorrecto.</p>
+                        <p class="error" ng-message="required">El CIF es obligatorio.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Persona de contacto</p>
+                    <input type="text" name="local" placeholder="Introduce persona de contacto" ng-model="client.contact"/>
+                </li> 
+                <li>
+                    <p class="section-label">Email</p>
+                    <input type="email" name="email" placeholder="Introduce email" ng-model="client.email"/>
+                    <div class="error" ng-messages="addClientForm.email.$error" ng-if="addClientForm.email.$dirty">
+                        <p class="error" ng-message="email">Email inválido.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Dirección</p>
+                    <input type="text" name="address" placeholder="Introduce dirección" required ng-model="client.address"/>
+                    <div class="error" ng-messages="addClientForm.address.$error" ng-if="addClientForm.address.$dirty">
+                        <p class="error" ng-message="required">La dirección es obligatoria.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Localidad</p>
+                    <input type="text" name="city" placeholder="Introduce localidad" required ng-model="client.city"/>
+                    <div class="error" ng-messages="addClientForm.city.$error" ng-if="addClientForm.city.$dirty">
+                        <p class="error" ng-message="required">La localidad es obligatoria.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Provincia</p>
+                    <select name="province" required ng-options="item.id as item.province for item in provinces" ng-model="client.province">
+                        <option disabled selected value="">- selecciona provincia -</option>
+                    </select>
+                    <div class="error" ng-messages="addClientForm.city.$error" ng-if="addClientForm.city.$dirty">
+                        <p class="error" ng-message="required">La provincia es obligatoria.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Código Postal</p>
+                    <input type="text" name="zip" placeholder="Introduce Código Postal" ng-model="client.zip"/>
+                </li>
+                <li>
+                    <p class="section-label">Teléfono</p>
+                    <input type="tel" name="phone" ng-pattern="/^[0-9]/" placeholder="Introduce teléfono" required ng-model="client.phone"/>
+                    <div class="error" ng-messages="addClientForm.phone.$error" ng-if="addClientForm.phone.$dirty">
+                        <p class="error" ng-message="pattern">Teléfono inválido.</p>
+                        <p class="error" ng-message="required">El teléfono es obligatorio.</p>
+                    </div>
+                </li>               
+            </ul>
+            
+            <div class="botonera">
+                <a class="btn-material" ng-click="goBack();">cancelar</a>
+                <button class="btn-material btn-primary" ng-click="addClient()" ng-disabled='addClientForm.$invalid'>guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

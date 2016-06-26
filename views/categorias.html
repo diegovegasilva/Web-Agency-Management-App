@@ -1,0 +1,16 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Listado de Categorías</h2>
+    </div>
+    <div class="widget-content">
+        <ul class="list">
+            <li ng-repeat='family in families'>
+                <p><a class="name" ng-bind='family.name' ng-href="{{family.href}}"></a></p>
+            </li>
+        </ul>
+    </div>
+    <pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>

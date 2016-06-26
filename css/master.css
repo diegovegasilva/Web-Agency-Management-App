@@ -1,0 +1,217 @@
+
+/*------- CONTENIDO ----------------*/
+
+
+/*------- HOME ------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+/*------------ BOTONES -----------*/
+.btn{
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.btn-delete{
+    color: #ffffff;
+    background-color: #F55E59;
+    border-color: #E25954;
+}
+.btn-send{
+    color: #fff;
+    background-color:#1e9bdd;
+    border-color: #3276b1;
+}
+.btn-confirm {
+    color: #ffffff;
+    background-color: #8eb936;
+    border-color: #7FA432;
+}
+.btn-add{
+    color: #ffffff;
+    background-color: #8eb936;
+    border-color: #7FA432;
+}
+.btn-back{
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    padding: 0 10px 0 30px;
+    line-height: 44px;
+    color: #fff;
+}
+.btn-back:before {
+    content:'';
+    position: absolute;
+    box-sizing: border-box;
+    left: 25px;
+    right: 0;
+    height: 34px;
+    margin-top: 5px;
+    z-index: -1;
+    border: 1px solid #000;
+    border-left-width: 0;
+    border-radius: 5px;
+    color: #ffffff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+.btn-back:after {
+    content:'';
+    position: absolute;
+    box-sizing: border-box;
+    left: 16px;
+    height: 27px;
+    width: 26px;
+    top: 8px;
+    z-index: -2;
+    border: 1px solid #000;
+    border-top: 0 transparent;
+    border-right: 0 transparent;
+    border-radius: 7px 5px 5px 7px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+.btn-next{
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    padding: 0 30px 0 10px;
+    line-height: 44px;
+    color: #fff;
+    background-color:transparent;
+    border:none;
+}
+.btn-next:before {
+    content:'';
+    position: absolute;
+    box-sizing: border-box;
+    right: 25px;
+    left: 0;
+    height: 34px;
+    margin-top: 5px;
+    z-index: -1;
+    border: 1px solid #000;
+    border-right-width: 0;
+    border-radius: 5px;
+    background-color: #8eb936;
+    border-color: #7FA432;
+}
+.btn-next:after {
+    content:'';
+    position: absolute;
+    box-sizing: border-box;
+    right: 16px;
+    height: 28px;
+    width: 26px;
+    top: 8px;
+    z-index: -2;
+    border: 1px solid #000;
+    border-top: 0 transparent;
+    border-left: 0 transparent;
+    border-radius: 5px 7px 7px 5px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    background-color: #8eb936;
+    border-color: #7FA432;
+}
+.btn:focus{
+    outline:none;
+}
+.btn:disabled,.btn:disabled:hover{
+    background-color: #C8C8C8;
+    color: #888;
+    border-color: #A9A9A9;
+    cursor:default;
+}
+.btn-next:disabled{
+    background-color:transparent;
+    border:none;
+}
+.btn-next:disabled:hover{
+    background-color:transparent;
+    border:none;
+}
+.btn-next:disabled:after,
+.btn-next:disabled:before,
+.btn-next:disabled:hover:after,
+.btn-next:disabled:hover:before{
+    background-color: #C8C8C8;
+    border-color: #A9A9A9;
+}
+.btn-delete:hover{
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+.btn-send:hover{
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+.btn-confirm:hover{
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+.btn-add:hover{
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+.btn-back:hover:after,
+.btn-back:hover:before{
+    background-color: #ec971f;
+    border-color: #d58512;
+}
+.btn-next:hover:after,
+.btn-next:hover:before{
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+
+
+
+/*-------------- ESTILOS -------------*/
+
+/*-------------- ICONOS -------------*/
+
+
+
+
+
+
+
+
+
+

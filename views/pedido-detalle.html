@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="widget white-box">
+        <div class="widget-header">
+            <h2>Detalle del pedido</h2>
+        </div>
+        <div class="widget-content">
+            <table class="table form order-detail">
+                <thead>
+                    <tr>
+                        <th class="align-left" style="width:35%">Nombre</th>
+                        <th class="align-left" style="width:20%">Formato</th>
+                        <th>Unidades</th>
+                        <th>Precio/ud</th>
+                        <th>Descuento</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="" ng-repeat="product in products| orderBy:'product_name' ">
+                        <td class="align-left">
+                            <label ng-bind='product.product_name'></label>
+                        </td>
+                        <td class="align-left">
+                             <label ng-bind='product.product_format'></label>
+                        </td>
+                        <td class="align-center">
+                            <label ng-bind="product.units"></label>
+                         </td>
+                        <td class="align-center">
+                            <label ng-bind="product.unit_price"></label>
+                         </td>
+                        <td class="align-center">
+                            <label ng-bind="product.discount"></label>
+                        </td>
+                        <td>
+                            <label ng-bind="product.price"></label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box">
+        <div class="widget-content">
+            <div class="list-resume">
+                <div class="price">                    
+                    <p><span class="label">Precio sin IVA:</span> <span ng-bind="order.price+'€'"></span></p>
+                    <p><span class="label">IVA:</span> <span ng-bind="order.vat+'€'"></span></p>
+                    <p><span class="label">Total:</span> <span ng-bind="order.total+'€'"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+
+

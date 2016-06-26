@@ -1,0 +1,32 @@
+<ul ng-if="editable">
+	<li><a class="icon new" ng-click="addMoreProducts()" title="añadir productos" ng-if="['0','1','3'].indexOf(userRol) > -1"></a></li>
+    <li><a class="icon cancel" ng-click="cancelOrder()" title="cancelar pedido" ng-if="['0','1','3'].indexOf(userRol) > -1"></a></li>
+    <li><a class="icon confirm" ng-click="confirmOrder()" title="confirmar pedido" ng-if="['0','1','3'].indexOf(userRol) > -1"></a></li>
+</ul>
+<script type="text/ng-template" id="OrderCreateModelContent.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Atención!!</h3>
+	</div>
+	<div class="modal-body">
+		<p>¿Estas seguro de cancelar el pedido?</p>
+		<p>Si lo cancelas perderas todo su contenido</p>
+		<p>Si quieres editar el pedido pulsa continuar y luego volver</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn-material" ng-click="cancel()">Cancelar pedido</button>
+		<button class="btn-material btn-primary" ng-click="ok()">Continuar</button>
+	</div>
+</script>
+<script type="text/ng-template" id="OrderEditModelContent.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Descartar cambios</h3>
+	</div>
+	<div class="modal-body">
+		<p>¿Estas seguro de anular los cambios?</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn-material" ng-click="cancel()">Cancelar cambios</button>
+                <button class="btn-material btn-primary" ng-click="ok()">Continuar</button>
+	</div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

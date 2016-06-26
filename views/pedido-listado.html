@@ -1,0 +1,129 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Pedidos <a ui-sref="clientesDetalle({clientID:clientID})" ng-if="clientID" ng-bind="'de '+clientName"></a></h2>
+    </div>
+    <div class="widget-content">
+        <table class="table form">
+            <thead>
+                <tr>
+                    <th class="align-left">Nº<a class="sort" ng-click="predicate = 'id'; reverse = !reverse"></a></th>
+                    <th>Fecha<a class="sort" ng-click="predicate = 'date'; reverse = !reverse"></a></th>
+                    <th ng-if="!clientID" style="width:32%">Cliente<a class="sort" ng-click="predicate = 'client_name'; reverse = !reverse"></a></th>
+                    <th ng-if="accepted == 1 || clientID">Facturas<a class="sort" ng-click="predicate = 'invoices'; reverse = !reverse"></a></th>
+                    <th ng-if="accepted == 1 || clientID">Pagadas<a class="sort" ng-click="predicate = 'payed'; reverse = !reverse"></a></th>
+                    <th ng-if="clientID">Estado</th>
+                    <th>Importe<a class="sort" ng-click="predicate = 'price'; reverse = !reverse"></a></th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="noResults">
+                    <td class="align-left" colspan="5">No se ha encontrado ningún pedido</td>
+                </tr>
+                <tr ng-repeat="order in orders| orderBy:predicate:reverse track by order.id">
+                    <td class="align-left">
+                        <label ng-bind='order.id'></label>
+                    </td>
+                    <td>	
+                        <label ng-bind="order.date | date:'dd/MM/yyyy'"></label>
+                    </td>
+                    <td ng-if="!clientID">	
+                        <label ><a ui-sref="clientesDetalle({clientID:order.client_id})" ng-bind='order.client_name'></a></label>
+                    </td>
+                    <td ng-if="accepted == 1 || clientID">
+                        <label ng-bind="accepted == 1 ? order.invoices : '-'"></label>
+                    </td>
+                    <td ng-if="accepted == 1 || clientID">
+                        <label ng-bind="accepted == 1 ? order.payed : '-'"></label>
+                    </td>
+                    <td ng-if="clientID"><label ng-bind="order.accepted == 0 ? 'pendiente' : 'aceptada'" ng-class="order.accepted == 0 ? 'label-danger' : 'label-success'"></label></td>
+                    <td>	
+                        <label ng-bind='order.total'></label>
+                    </td>
+                    <td>
+                         <a ng-if="order.accepted == 1" ui-sref="pedidoDetalle({orderID:order.id})"  class="btn detail-small" title="ver pedido" ></a>
+                         <button ng-if="order.accepted == 0" type="button" class="btn detail-small" title="ver pedido" ng-click="orderDetail(order.id)"></button>
+                        <button ng-if="order.accepted == 0" type="button" class="btn accept-small" title="aceptar pedido" ng-click="acceptOrder(order.id,order.client_id,order.total)"></button>
+                        
+                       
+                        <button ng-if="order.accepted == 1" type="button" class="btn project-small" title="ver proyecto"  ng-click="projectDetail(order.project_id)"></button>
+                        <a ui-sref="listadoFacturasPedidos({orderID:order.id})" ng-if="order.accepted == 1" type="button" class="btn invoice-small" title="ver facturas"  ></a>
+                        <button type="button" class="btn delete-small" title="eliminar pedido" ng-click="deleteOrder(order.id)" ng-if="['0', '1', '3'].indexOf(userRol) > -1"></button> 
+                    </td>            
+                </tr>
+            </tbody>
+        </table>
+        <pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+</div>
+<script type="text/ng-template" id="deleteOrderModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar este pedido?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-click="delete(orderID)">Borrar</button>		
+    </div>
+</script>
+<script type="text/ng-template" id="acceptOrderModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Aceptar Pedido</h3>
+    </div>
+    <div class="modal-body">
+    <form class="form edit-form" name="acceptOrderForm" novalidate>
+    <ul class="full-width">
+    <li>
+        <p class="section-label">Forma de pago</p>
+        <select name="method" required ng-options="item.id as item.name for item in PaymentMethods" ng-model="order.payment_method">
+            <option disabled selected value="">- selecciona forma de pago -</option>
+        </select>
+        <div class="error" ng-messages="acceptOrderForm.method.$error" ng-if="acceptOrderForm.method.$dirty">
+            <p class="error" ng-message="required">La forma de pago es obligatoria.</p>
+        </div>
+    </li>
+    <li>
+        <p class="section-label">Plazos de pago</p>
+        <select name="installments" required ng-options="item.id as item.name for item in installments" ng-model="order.installments">
+            <option disabled selected value="">- selecciona plazos de pago -</option>
+        </select>
+        <div class="error" ng-messages="acceptOrderForm.installments.$error" ng-if="acceptOrderForm.installments.$dirty">
+            <p class="error" ng-message="required">Los plazos de pago son  obligatorios.</p>
+        </div>
+    </li>
+    <li>
+    <p class="section-label">Nombre del proyecto asociado</p>
+    <input type="text" name="project" ng-model="project.name" required />
+    <div class="error" ng-messages="acceptOrderForm.project.$error" ng-if="acceptOrderForm.project.$dirty">
+                        <p class="error" ng-message="required">El nombre del proyecto.</p>
+                    </div>
+    </li>
+     <li>
+                    <p class="section-label">Fecha de finalización</p>
+                    <input type="date" name="end_date" placeholder="Introduce fecha" required ng-model="project.end_date" ng-model-options="{timezone: timezoneOffset}"/>
+                    <div class="error" ng-messages="addProjectForm.end_date.$error" ng-if="addProjectForm.end_date.$dirty">
+                        <p class="error" ng-message="required">La fecha de finalización es obligatoria.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Horas presupuestadas</p>
+                    <input type="number" name="hours_budget" placeholder="Introduce horas" required ng-model="project.hours_budget" min="0" step="0.25"/>
+                    <div class="error" ng-messages="addProjectForm.hours_budget.$error" ng-if="addProjectForm.hours_budget.$dirty">
+                        <p class="error" ng-message="required">La horas presupuestadas son obligatorias.</p>
+                    </div>
+                </li>
+    </ul>
+    </form>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">cancelar</button>
+    <button class="btn-material btn-primary" ng-disabled='acceptOrderForm.$invalid' ng-click="accept(order,project)">Aceptar</button>    
+    </div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+

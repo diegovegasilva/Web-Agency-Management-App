@@ -1,0 +1,7 @@
+<ul>
+	<li><a class="icon category" ui-sref="categoriasPedido" title="vista por categorias"></a></li>
+	<li><a class="icon gridView" title="vista rejilla" ng-click="changeView('grid')" ng-show="view=='list'"></a></li>
+    <li><a class="icon listView" title="vista listado" ng-click="changeView('list')" ng-show="view=='grid'"></a></li>
+    <li><a class="icon database" ng-click="endOrder()" title="finalizar pedido"><span class="units" ng-show="productUnits > 0" ng-bind="productUnits"></span></a></li>
+</ul>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

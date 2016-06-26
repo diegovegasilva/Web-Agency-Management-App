@@ -1,0 +1,127 @@
+<div class="panel">
+    <div class="panel-heading">
+        <div class="invoiceDate" ng-if="invoice.date"><span>Fecha de emisión:</span> <input type="date" readonly ng-model="invoice.date"   /></div>
+        <div class="invoiceID">Factura nº {{invoice.invoice_num}}/{{year}}</div>
+    </div>
+    <div class="panel-data">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="client-data">
+                        <p>Cliente</p>
+                        <p class="tit" ng-bind="invoice.client_name"></p>
+                        <p ng-bind="invoice.cif"></p>
+                        <p ng-bind="invoice.address"></p>
+                        <p ng-bind="invoice.city"></p>
+                        <p ng-bind="invoice.provinceName"></p>
+                        <p ng-bind="'C.P.:'+invoice.zip"></p>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td class="invoice-data">
+                        <div class="logo"><img ng-src="upload/{{userData.image}}" /></div>
+                        <p>Empresa</p>
+                        <p class="tit" ng-bind="userData.name"></p>
+                        <p ng-bind="userData.cif"></p>
+                        <p ng-bind="userData.address"></p>
+                        <p ng-bind="'C.P.:'+userData.zip"></p>
+                        <p ng-bind="userData.city"></p>
+                        <p ng-bind="userData.provinceName"></p>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-body">
+        <table class="table table-invoice table-striped bg-white form">
+            <thead>
+                <tr>
+                    <th style="width:47%; text-align:left;">Producto</th>
+                    <th style="width:15%; text-align:left;"></th>
+                    <th style="width:12%;text-align:right;">Uds.</th>
+                    <th ng-if="discount" style="width:12%;text-align:right;">Dto.</th>
+                    <th style="width:14%; text-align:right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in products">
+
+                    <td class="align-left">
+                        <input type="text" readonly ng-model='product.product_name' />
+                    </td>
+                    <td class="align-right">
+                        <input type="text" readonly ng-model='product.product_format' />
+                    </td>
+                    <td class="align-right">	
+                        <input type="number" readonly ng-model="product.units" min="1" placeholder="uds."  />
+                    </td>
+
+                    <td ng-if="discount" class="align-right">
+                        <input type="text" readonly ng-model='product.discount' />
+                    </td>                   
+                    <td class="align-right">
+                        {{product.price | number:2}}
+                    </td>   
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                     <td colspan="7">&nbsp;</td>
+                     <td ng-if="discount"></td>
+                </tr>
+                <tr ng-if="iva.length > 1">
+                    
+                    <td></td>
+                    <td ng-if="discount"></td>
+                    <td class="align-right"></td>
+                    <td class="align-right">Base</td>
+                    <td class="align-right">Couta</td>
+                </tr>
+                <tr ng-if="iva.length > 1" ng-repeat="item in iva| orderBy : id">
+                    
+                    <td></td>
+                    <td ng-if="discount"></td>
+                    <td class="align-right">IVA {{item.id}}%</td>               
+                    <td class="align-right">{{item.base| number: 2}}</td>
+                    <td class="align-right">{{item.value}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td ng-if="discount"></td>
+                    <td class="align-right">Base imponible</td>
+                    <td></td>
+                    <td class="align-right">
+                        <input type="text" readonly ng-model='invoice.installmentBase'  />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td ng-if="discount"></td>
+                    <td class="align-right">IVA</td>
+                    <td></td>
+                    <td class="align-right">
+                        <input type="text" readonly ng-model='invoice.installmentVat'  />
+                    </td>
+                </tr>
+                <tr ng-if="iva.length > 1">
+                    <td></td>
+                    <td ng-if="discount"></td>
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td ng-if="discount"></td>
+                    <td class="align-right">Total</td>
+                    <td></td>
+                    <td class="align-right">
+                        <input type="text" readonly ng-model='invoice.subTotal'  />
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <p class="observaciones">plazo {{invoice.installment_num}} de {{invoice.installments}} ({{percentage*100}}% del total)</p>
+    </div>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>

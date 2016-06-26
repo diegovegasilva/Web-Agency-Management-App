@@ -1,0 +1,248 @@
+<div class="row">
+    <div class="widget white-box col-6">
+        <div class="widget-header">
+            <h2>Información personal</h2>
+        </div>
+        <div class="widget-content">
+            <form class="form" name="editClientForm" novalidate>
+                <ul>
+                    <li>
+                        <p class="section-label">Empresa</p>
+                        <input type="text" name="name" placeholder="Introduce nombre" required ng-model="client.name" input-enable readonly />
+                        <div class="error" ng-messages="editClientForm.name.$error" ng-if="editClientForm.name.$dirty">
+                            <p class="error" ng-message="required">La empresa es obligatoria.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">CIF</p>
+                        <input type="text" name="cif"  placeholder="Introduce CIF" ng-minlength=9 required ng-model="client.cif" input-enable readonly />
+                        <div class="error" ng-messages="editClientForm.cif.$error" ng-if="editClientForm.cif.$dirty">
+                            <p class="error" ng-message="minlength">CIF incorrecto.</p>
+                            <p class="error" ng-message="required">El CIF es obligatorio.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Persona de contacto</p>
+                        <input type="text" name="local" placeholder="Introduce persona de contacto" ng-model="client.contact" input-enable readonly />
+                    </li>
+                    <li>
+                        <p class="section-label">Email</p>
+                        <input type="email" name="email" placeholder="Introduce email" ng-model="client.email" input-enable readonly />
+                        <div class="error" ng-messages="editClientForm.email.$error" ng-if="editClientForm.email.$dirty">
+                            <p class="error" ng-message="email">Email inválido.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Dirección</p>
+                        <input type="text" name="address" placeholder="Introduce dirección" required ng-model="client.address" input-enable readonly />
+                        <div class="error" ng-messages="editClientForm.address.$error" ng-if="editClientForm.address.$dirty">
+                            <p class="error" ng-message="required">La dirección es obligatoria.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Localidad</p>
+                        <input type="text" name="address" placeholder="Introduce Localidad" required ng-model="client.city" input-enable readonly />
+                        <div class="error" ng-messages="editClientForm.city.$error" ng-if="editClientForm.city.$dirty">
+                            <p class="error" ng-message="required">La localidad es obligatoria.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Provincia</p>
+                        <div class="selectEnabling" ng-show="!selectDisable" ng-click="selectable()"></div>
+                        <select name="province" required ng-options="item.id as item.province for item in provinces" ng-model="client.province" ng-disabled="!selectDisable" ng-blur="selectable()">
+                            <option disabled selected value="">- selecciona provincia -</option>
+                        </select>
+                        <div class="error" ng-messages="addClientForm.city.$error" ng-if="addClientForm.city.$dirty">
+                            <p class="error" ng-message="required">La provincia es obligatoria.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Código Postal</p>
+                        <input type="text" name="zip" placeholder="Introduce Código Postal" ng-model="client.zip" input-enable readonly/>
+                    </li>
+                    <li>
+                        <p class="section-label">Teléfono</p>
+                        <input type="tel" name="phone" ng-pattern="/^[0-9]/" placeholder="Introduce teléfono" required ng-model="client.phone" input-enable readonly/>
+                        <div class="error" ng-messages="editClientForm.phone.$error" ng-if="editClientForm.phone.$dirty">
+                            <p class="error" ng-message="pattern">Teléfono inválido.</p>
+                            <p class="error" ng-message="required">El teléfono es obligatorio.</p>
+                        </div>
+                    </li>
+
+                </ul>
+                <div class="botonera">
+                    <button ng-click="deleteClient()"  class="btn-material btn-delete" ng-if="['0', '1'].indexOf(userRol) > -1">Eliminar Cliente</button>
+                    <button ng-click="editClient()" ng-disabled="originalEditForm() || editClientForm.$invalid" class="btn-material btn-primary">Editar</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="widget white-box col-6">
+        <div class="widget-header">
+            <div class="widget-header-menu pull-right">
+                <form class="form" ng-class="{'active': searchOn}">
+                    <!--<i class="fa fa-search"></i>-->
+                    <input id="search" type="text" ng-model="search" ng-blur="searchOn=false" set-focus="focusInput">
+                </form>
+                <a class="btn-header" ng-click="searchOn=true;focusInput=true"><i class="fa fa-search"></i></a>
+                <a class="btn-header" ng-click="addComment()"><i class="fa fa-plus"></i></a>
+            </div>
+
+
+            <h2>Comentarios</h2>
+        </div>
+        <div class="widget-content">
+            <ul class="list-comments">
+                <li ng-repeat="comment in comments| orderBy : '-id'">
+                    <div class="avatar">
+                        <div>
+                            <img ng-src="/upload/{{comment.url}}" />
+                        </div>                        
+                    </div>
+                    <div class="comment-item">
+                        <div>
+                            <span class="name ng-binding" ng-bind="comment.username">bolo</span>
+                            <div class="comment-html" ng-bind-html="comment.comment"></div>
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box col-6">
+        <div class="widget-header">
+            <div class="widget-header-menu pull-right">
+                <a class="btn-header" ng-click="menuProject = !menuProject"><i class="fa fa-ellipsis-v "></i></a>
+                <ul class="subMenu-header" ng-class="{'subMenu-visible' : menuProject}" ng-show="menuProject">
+                    <li>
+                        <a ui-sref="proyectoCrear({clientID:clientID})" class="btn-header"><i class="icon plus"></i>Nuevo proyecto</a>
+                    </li>
+                    <li>
+                        <a ui-sref="proyectos({clientID:clientID})" class="btn-header"><i class="icon list-alt"></i>Ver todos</a>
+                    </li>
+                </ul>
+            </div>
+            <h2>Proyectos activos</h2>
+        </div>
+        <div class="widget-content">
+            <div class="overflow-list-header">
+                <table class="table noMargin">
+                    <thead>
+                    <th style="width:20%;" class="align-left">Finalización<a class="sort" ng-click="predicate = 'end_date'; reverse = !reverse"></a></th>
+                    <th style="width:25%;" class="align-left">Nombre<a class="sort" ng-click="predicate = 'name'; reverse = !reverse"></th>
+                    <th style="width:12%;">H. pres<a class="sort" ng-click="predicate = 'hours_budget'; reverse = !reverse"></th>
+                    <th style="width:12%;">H. cons<a class="sort" ng-click="predicate = 'hours_total'; reverse = !reverse"></th>
+                    <th style="width:15%;min-width: 80px;">Estado<a class="sort" ng-click="predicate = 'status'; reverse = !reverse"></th>
+                    <th style="width:10%; min-width: 88px;">Acciones</th>
+                    </thead>
+                </table>
+            </div>
+            <div class="overflow-list">
+                <table class="table form">
+                    <tbody>
+                        <tr  ng-repeat='project in projects| orderBy:predicate:reverse track by project.id'>
+                            <td style="width:20%;" class="align-left"><label ng-class="dateWarning(project)" class="name" ng-bind="project.end_date | date:'dd/MM/yyyy'"></label></td>
+                            <td style="width:25%;" class="align-left"><a class="name" ng-bind="project.name" ui-sref="proyectosDetalle({projectID:project.id})"></a></td>
+                            <td style="width:12%;"><label class="name" ng-bind="project.hours_budget"></label></td>
+                            <td style="width:12%;"><label ng-class="hourWarning(project)" class="name" ng-bind="project.hours_total === null ? '0' : project.hours_total"></label></td>
+                            <td style="width:15%;min-width: 80px;"><a ng-click="changeStatus('project', project.id, project.status);project.status = !project.status" class="name" ng-bind="project.status == 0 ? 'cerrada' : 'abierta'" ng-class="{'closed' : project.status == 0}"></a></td>
+                            <td style="width:10%; min-width: 88px;">
+                                <a class="btn detail-small" title="ver proyecto" ui-sref="proyectosDetalle({projectID:project.id})" ></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="widget white-box col-6">
+        <div class="widget-header">
+            <div class="widget-header-menu pull-right">
+                <a class="btn-header" ng-click="menuTasks = !menuTasks"><i class="fa fa-ellipsis-v "></i></a>
+                <ul class="subMenu-header" ng-class="{'subMenu-visible' : menuTasks}" ng-show="menuTasks">
+                    <li>
+                        <a ui-sref="TareaClientCrear({clientID:clientID})" class="btn-header"><i class="icon plus"></i>Nueva tarea</a>
+                    </li>
+                    <li>
+                        <a ui-sref="clienteTareas({clientID:clientID})" class="btn-header"><i class="icon list-alt"></i>Ver todas</a>
+                    </li>
+                </ul>
+            </div>
+            <h2>Actividad de tareas</h2>
+        </div>
+        <div class="widget-content">
+            <div class="overflow-list-header">
+                <table class="table noMargin">
+                    <thead>
+                    <th style="width:20%;" class="align-left">Fecha<a class="sort" ng-click="predicate = 'date'; reverse = !reverse"></a></th>
+                    <th style="width:31%;" class="align-left">Nombre<a class="sort" ng-click="predicate = 'name'; reverse = !reverse"></th>
+                    <th style="width:17%;" class="align-left">Asignada<a class="sort" ng-click="predicate = 'assigned'; reverse = !reverse"></th>
+                    <th style="width:17%; min-width: 80px;" class="align-left">Estado<a class="sort" ng-click="predicate = 'status'; reverse = !reverse"></th>
+                    <th style="width:15%; min-width: 100px;">Acciones</th>
+                    </thead>
+                </table>
+            </div>
+            <div class="overflow-list">
+                <table class="table form">
+                    <tbody>
+                        <tr ng-repeat='task in tasks'>
+                            <td style="width:20%;" class="align-left"><label class="name" ng-bind="task.date | date:'dd/MM/yyyy'"></label></td>
+                            <td style="width:31%;" class="align-left"><a class="name" ng-bind="task.name" ui-sref="tareaDetalle({taskID:task.id})"></a></td>
+                            <td style="width:17%;" class="align-left"><a class="name" ng-bind="task.assignedName" ui-sref="usuariosDetalle({userID:task.assigned})"></a></td>
+                            <td style="width:17%; min-width: 80px;" class="align-left"><a ng-click="changeStatus('task', task.id, task.status);task.status = !task.status" class="name" ng-bind="task.status == 0 ? 'cerrada' : 'abierta'" ng-class="{'closed' : task.status == 0}"></a></td>
+                            <td style="width:15%; min-width: 100px;">
+                                <a class="btn detail-small" title="ver tarea" ui-sref="tareaDetalle({taskID:task.id})" ></a>
+                                <button type="button" class="btn hours-small" title="apuntar horas" ng-click="insertTime(task.id)" ng-if="task.status != 0"></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<script type="text/ng-template" id="deleteClientModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar este cliente?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-click="delete()">Borrar</button>
+
+    </div>
+</script>
+<script type="text/ng-template" id="addCommentModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Añadir comentario</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form edit-form" name="addCommentForm" novalidate>
+            <ul class="full-width">
+                <li>
+                    <text-angular name="comment" ng-model="comment.comment" required></text-angular>
+                    <div class="error" ng-messages="addCommentForm.comment.$error" ng-if="addCommentForm.comment.$dirty">
+                    <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-disabled='addCommentForm.$invalid' ng-click="add()">Guardar</button>
+    </div>
+</script>

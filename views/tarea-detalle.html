@@ -1,0 +1,134 @@
+
+<div class="row">
+    <div class="widget white-box col-3">
+        <div class="widget-header">
+            <h2>Información Tarea</h2>
+        </div>
+        <div class="widget-content">
+            <form class="form" name="editTaskForm" novalidate>
+                <ul class="full-width">    
+                    <li>
+                        <p class="section-label">Nombre</p>
+                        <input type="text" name="name" placeholder="Introduce nombre" required ng-model="task.name" input-enable readonly />
+                        <div class="error" ng-messages="editTaskForm.name.$error" ng-if="editTaskForm.name.$dirty">
+                            <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Horas presupuestadas</p>
+                        <input type="number" name="hours_budget" required ng-model="task.hours_budget" min="0" step="0.25" input-enable readonly   />
+                        <div class="error" ng-messages="editTaskForm.task.hours_budget.$error" ng-if="editTaskForm.task.hours_budget.$dirty">
+                            <p class="error" ng-message="required">Las horas son obligatorios.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Asignada a</p>
+                        <ui-select  required ng-model="selected.value" on-select="selectChange()" ng-click="enable()" append-to-body="true" ng-disabled="!disabled">
+                            <ui-select-match placeholder="- selecciona usuario -" >
+                                <span ng-bind="$select.selected.username"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="user in (users | filter: $select.search) track by user.id">
+                                <span ng-bind="user.username"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </li>
+                    <li>
+                        <p class="section-label">Estado</p>
+                        <input type="checkbox" ng-model="task.status" ng-checked="task.status == 1" ng-true-value="1" ng-false-value="0">
+                        <label class="switch-label" for="active" ng-bind="task.status == 0 ? 'Cerrada' : 'Abierta'"></label>
+                        <button type="button" class="switch" ng-class="task.status == 1 ? 'active' : ''" ng-model="task.status" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
+                    </li>
+                </ul>
+            </form>
+            
+        </div>
+        <div class="widget-footer widget-footer-bottom">
+            <div class="botonera">
+                <a class="btn-material btn-primary" ui-sref="proyectosDetalle({projectID:task.project_id})">ver proyecto</a>   
+            </div>
+        </div>
+    </div>
+    <div class="widget white-box col-9">
+        <div class="widget-header">
+            <h2>Anotaciones de la tarea</h2>
+        </div>
+        <div class="widget-content">
+            <ul class="list-comments">
+                <li ng-repeat="hour in hours | orderBy : '-date'">
+                    <article>
+                    <div class="avatar">
+                        <div>
+                        <img ng-src="/upload/{{hour.url}}" />
+                        </div>                        
+                    </div>
+                    <div class="list-item">
+                        <div>
+                        <span class="name" ng-bind="hour.username"></span>
+                        <a  ng-click="displayComments = !displayComments" class="see-commnets" ng-show="hour.comments">ver comentario</a>
+                        </div>
+                        <div>
+                        <span class="date" ng-bind="hour.date | date:'dd/MM/yyyy'"></span>
+                        
+                        <span class="hours" ng-bind="hour.hours == '1.00' ? hour.hours +' hora' : hour.hours +' horas'"></span>
+                        </div>
+                        
+                    </div>
+                    </article>
+                    <div class="comments" ng-bind="hour.comments" ng-class="{'visible': displayComments}"></div>
+                </li>
+
+            </ul>
+        </div>
+        <div class="widget-footer">
+            <div class="results">
+                <p>h. pres.: <span ng-bind="task.hours_budget"></span></p>
+                <p ng-class="totalTime > task.hours_budget ? 'text-danger' : ''">h. cons.: <span ng-bind="totalTime"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box col-6">
+        <div class="widget-header">
+            <h2>Descripción Tarea</h2>
+        </div>
+        <div class="widget-content">
+            <form class="form" name="editTaskForm" novalidate>
+                <ul class="full-width">
+                    <li>
+                        <p class="section-label">Descripción</p>
+                        
+                    <text-angular ng-model="task.description" ng-click="enableText()" ta-disabled="!nowrite"></text-angular>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box">
+        <div class="widget-content">
+            <div class="botonera">
+                <button ng-click="deleteTask()"  class="btn-material btn-delete" ng-if="allowed">Eliminar Tarea</button>
+                <button ng-click="editTask()" ng-disabled="originalEditForm() || editTaskForm.$invalid" class="btn-material btn-primary" ng-if="allowed">Editar</button>
+            </div>  
+        </div>
+    </div>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<script type="text/ng-template" id="deleteTaskModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar esta tarea?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-click="delete()">Borrar</button>
+
+    </div>
+</script>

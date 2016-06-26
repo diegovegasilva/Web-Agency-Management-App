@@ -1,0 +1,51 @@
+<div class="widget white-box">
+    <div class="widget-header green-header">
+        <h2>Nuevo proyecto</h2>
+    </div>
+    <div class="widget-content">
+        <form class="form edit-form" name="addProjectForm" novalidate>
+            <ul>
+                <li>
+                    <p class="section-label">Nombre</p>
+                    <input type="text" name="name" placeholder="Introduce nombre" required ng-model="project.name"/>
+                    <div class="error" ng-messages="addProjectForm.name.$error" ng-if="addProjectForm.name.$dirty">
+                        <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Cliente</p>
+                    <ui-select  required ng-model="selected.value"  append-to-body="true">
+                        <ui-select-match placeholder="- selecciona cliente -">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="client in (clients | filter: $select.search) track by client.id">
+                            <span ng-bind="client.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="error" ng-messages="addProjectForm.client.$error" ng-if="addProjectForm.client_id.$dirty">
+                           <p class="error" ng-message="required">Selecciona un cliente.</p>
+                       </div>
+                </li>
+                <li>
+                    <p class="section-label">Fecha de finalización</p>
+                    <input type="date" name="end_date" placeholder="Introduce fecha" required ng-model="project.end_date" ng-model-options="{timezone: timezoneOffset}"/>
+                    <div class="error" ng-messages="addProjectForm.end_date.$error" ng-if="addProjectForm.end_date.$dirty">
+                        <p class="error" ng-message="required">La fecha de finalización es obligatoria.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Horas presupuestadas</p>
+                    <input type="number" name="hours_budget" placeholder="Introduce horas" required ng-model="project.hours_budget" min="0" step="0.25"/>
+                    <div class="error" ng-messages="addProjectForm.hours_budget.$error" ng-if="addProjectForm.hours_budget.$dirty">
+                        <p class="error" ng-message="required">La horas presupuestadas son obligatorias.</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="botonera">               
+                <button class="btn-material btn-primary" ng-click="addProject()" ng-disabled='addProjectForm.$invalid'>Crear</button>
+                <a class="btn-material " ng-click="goBack();">cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
