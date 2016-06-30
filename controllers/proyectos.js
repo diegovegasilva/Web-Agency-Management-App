@@ -393,18 +393,21 @@
         $scope.taskID = $stateParams.taskID;
         
         ProjectsService.getTask($scope.taskID).then(function (data) {
-            $scope.task = data.data;
+                $scope.task = data.data;
         });
         UsersService.getUsers().then(function(data){
             $scope.users = data.data.data;            
             var selected = $filter('filter')($scope.users, function(d) {return d.id == $scope.task.assigned})[0];
             $scope.selected = {value:selected};
         });
-        ProjectsService.getTaskTime($scope.taskID).then(function(data){
-            $scope.hours = data.data.data;
-            $scope.totalTime = data.data.totalTime;
-        });
-        
+        $scope.getTaskTime = function(){
+            ProjectsService.getTaskTime($scope.taskID).then(function(data){
+                $scope.hours = data.data.data;
+                $scope.totalTime = data.data.totalTime;
+            });
+        };
+        $scope.getTaskTime();
+
         $scope.selectChange = function(){            
             $scope.task.assigned = $scope.selected.value.id;
         };
@@ -456,6 +459,27 @@
                 $scope.nowrite = true;
             }            
         };
+        
+        $scope.insertTime = function() {
+            $scope.modalInstance = $modal.open({
+                templateUrl: 'inserTimeModal.html',
+                scope: $scope,
+                controller: 'TasksListController'
+            });
+            $scope.alerts = [];
+            //modal editar
+            $scope.insert = function (task) {
+                task.task_id= $scope.taskID;
+                task.user = $rootScope.currentUserID;
+                ProjectsService.addTaskTime(task).then(function (data) {
+                    $scope.modalInstance.dismiss();
+                    $scope.alerts = [{type: 'success', msg: 'Horas apuntadas.'}];
+                    $timeout($scope.closeAlert, 1000);
+                    $scope.getTaskTime();
+                });
+            };
+        };
+        
         $scope.allow = function(){
             var users = ['0', '1'];
             if(users.indexOf($rootScope.userRol) > -1 || $scope.task.marker == $rootScope.currentUserID){

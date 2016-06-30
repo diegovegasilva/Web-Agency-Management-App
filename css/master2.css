@@ -22,6 +22,7 @@
 }
 a{
     cursor: pointer;
+    color: #8EB936;
 }
 html{
     position:relative;
@@ -724,6 +725,9 @@ td.align-center input{
     font-size:14px;
     font-weight:400;
     padding:10px 0px;
+}
+.form p.section-label + a{
+    font-weight: 500;
 }
 .form label{
     display: inline-block;
@@ -3135,6 +3139,9 @@ i.icon:before{
 }
 .fa-list-ul:before {
     content: "\f0ca";
+}
+.fa-clock:before {
+    content: "\f017";
 }
 .fa-list-ol:before {
     content: "\f0cb";

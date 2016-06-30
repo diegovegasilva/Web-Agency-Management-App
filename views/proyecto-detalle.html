@@ -31,7 +31,7 @@
                         <p class="section-label">Estado</p>
                         <input type="checkbox" ng-model="project.status" ng-checked="project.status == 1" ng-true-value="1" ng-false-value="0" ng-disabled="['0', '1', '2'].indexOf(userRol) < 0">
                         <label class="switch-label" for="active" ng-bind="project.status == 0 ? 'Cerrada' : 'Abierta'"></label>
-                        <button type="button" class="switch" ng-class="project.status == 1 ? 'active' : ''" ng-model="project.status" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-disabled="['0', '1', '2'].indexOf(userRol) < 0"></button>
+                        <button type="button" class="switch {{}}" ng-class="project.status == 1 ? 'active' : ''" ng-model="project.status" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-disabled="['0', '1', '2'].indexOf(userRol) < 0"></button>
                     </li>
                 </ul>
             </form>

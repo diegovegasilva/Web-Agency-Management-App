@@ -2385,7 +2385,7 @@ ON config_data.province = provinces.id";
         }
         $id = (int) $this->_request['id'];
         if ($id > 0) {
-            $query = "SELECT * FROM tasks WHERE id=$id";
+            $query = "SELECT tasks.*, projects.name as project_name FROM tasks LEFT JOIN projects ON projects.id = tasks.project_id WHERE tasks.id=$id";
             $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
             if ($r->num_rows > 0) {
                 $result = $r->fetch_assoc();
