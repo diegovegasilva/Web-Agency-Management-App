@@ -17,9 +17,6 @@ var filesToMove = [
   './src/templates/*.*',
   './src/upload/*.*',
   './src/favicon.ico',
-  './src/js/services/*.*',
-  './src/js/directives/*.*',
-  './src/js/filters/*.*',
   './src/.htaccess'
 ];
 var filesToLint = [
