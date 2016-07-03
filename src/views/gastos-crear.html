@@ -1,0 +1,64 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Insertar gastos</h2>
+    </div>
+    <div class="widget-content">
+        <form class="form edit-form" name="addExpensesForm" novalidate>
+            <ul>
+                <li>
+                    <p class="section-label">Nombre</p>
+                    <input type="text" name="name" placeholder="Introduce nombre" required ng-model="expenses.name"/>
+                    <div class="error" ng-messages="addExpensesForm.name.$error" ng-if="addExpensesForm.name.$dirty">
+                        <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Importe</p>
+                    <input type="number" name="amount" placeholder="Introduce importe" required ng-model="expenses.amount" step='0.25' min="0"/>
+                    <div class="error" ng-messages="addExpensesForm.amount.$error" ng-if="addExpensesForm.amount.$dirty">
+                        <p class="error" ng-message="required">El importe es obligatorio.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Usuario</p>
+                    <ui-select  required ng-model="selected.value"  append-to-body="true">
+                        <ui-select-match placeholder="- selecciona usuario -">
+                            
+                            <span ng-bind="$select.selected.username"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="user in (users | filter: $select.search) track by user.id">
+                            <span ng-bind="user.username"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="error" ng-messages="addExpensesForm.user.$error" ng-if="addExpensesForm.user.$dirty">
+                        <p class="error" ng-message="required">Selecciona un usuario.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Frecuencia</p>
+                    <select name="frequency" required ng-options="item.id as item.name for item in frequency" ng-model="expenses.frequency">
+                        <option disabled selected value="">- selecciona frecuencia -</option>
+                    </select>
+                    <div class="error" ng-messages="addExpensesForm.frequency.$error" ng-if="addExpensesForm.frequency.$dirty">
+                        <p class="error" ng-message="required">La frecuencia es obligatoria.</p>
+                    </div>
+                </li>
+                <li>
+                    <p class="section-label">Fecha</p>
+                    <input type="date" name="date" ng-model="expenses.date" ng-model-options="{timezone: timezoneOffset}" required/>
+                    <div class="error" ng-messages="addExpensesForm.date.$error" ng-if="addExpensesForm.date.$dirty">
+                        <p class="error" ng-message="required">La fecha es obligatoria.</p>
+                    </div>
+                </li>
+                
+                               
+            </ul>
+            
+            <div class="botonera">
+                <a class="btn-material" ng-click="goBack();">cancelar</a>
+                <button class="btn-material btn-primary" ng-click="addExpenses()" ng-disabled='addExpensesForm.$invalid'>guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

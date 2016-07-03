@@ -1,0 +1,42 @@
+<div class="widget white-box">
+    <div class="widget-header green-header">
+        <h2>Cliente</h2>
+    </div>
+    <div class="widget-content">
+        <form class="form edit-form" name="addOrderForm" novalidate>
+            <ul>
+                <li>
+                    <ui-select  required ng-model="selected.value"  append-to-body="true">
+                        <ui-select-match placeholder="- selecciona cliente -">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="client in (clients | filter: $select.search) track by client.id">
+                            <span ng-bind="client.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <div class="error" ng-messages="addOrderForm.client.$error" ng-if="addOrderForm.client.$dirty">
+                        <p class="error" ng-message="required">Selecciona un cliente.</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="botonera">               
+                <button class="btn-material btn-primary" ng-click="startOrder()" ng-disabled='addOrderForm.$invalid'>siguiente</button>
+                <a class="btn-material " ng-click="goBack();">cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>Hay un pedido pendiente</p>
+    <p>¿Quieres continuar con el pedido?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Reiniciar</button>
+    <button class="btn-material btn-primary" ng-click="ok()">Continuar</button>
+    </div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

@@ -1,0 +1,67 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Árbol de categorías</h2>
+    </div>
+    <div class="widget-content">
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<ul class="nested-list">
+    <li ng-repeat="family in rootFamilies" ng-include="'categoryTree'">
+    </li>
+</ul>
+    </div>
+</div>
+
+<script type="text/ng-template" id="categoryTree">
+    <form class="form">
+		<a ng-click="editFamily(family.id)" ng-bind="family.name"></a>
+		<button class="btn btn-delete" ng-click="deleteFamily(family.id)">x</button>
+	</form>
+	<ul class="subcategory" ng-if="family.child">
+		<li ng-repeat="family in family.child" ng-include="'categoryTree'">
+		</li>	
+	</ul>
+</script>
+<script type="text/ng-template" id="editFamilyModal.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Editar Familia</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form edit-form" name="editFamilyForm" novalidate>
+			<ul>
+				<li>
+					<p class="section-label">*Nombre</p>
+					<input type="text" name="name" placeholder="Introduce nombre" required ng-model="familia.name"/>
+					<div class="error" ng-messages="editFamilyForm.name.$error" ng-if="editFamilyForm.name.$dirty">
+						<p class="error" ng-message="required">El nombre es obligatorio.</p>
+					</div>
+				</li>
+				<li>
+					 <p class="section-label">Familia de la que depende</p>
+					 <select name="category" ng-options="family.id as family.name for family in familias" ng-model="familia.category_id">
+						<option value="">categoría padre</option>
+					</select>
+				</li>
+			</ul>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn-material" ng-click="cancel()">Cancelar</button>
+		<button class="btn-material btn-primary" ng-disabled='editFamilyForm.$invalid' ng-click="edit(familia)">Editar</button>
+	</div>
+</script>
+<script type="text/ng-template" id="deleteFamilyModal.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Atención!!</h3>
+	</div>
+	<div class="modal-body">
+		<p>¿Estas seguro de borrar esta familia?</p>
+		<p>Si la borras todas su familias hijas serán eliminadas si las tiene</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn-material" ng-click="cancel()">Cancelar</button>
+		<button class="btn-material btn-primary" ng-click="delete(familyID)">Borrar</button>
+	</div>
+</script>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>

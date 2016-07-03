@@ -1,0 +1,101 @@
+<form class="form edit-form" name="addTaskForm" novalidate>
+    <div class="row">
+        <div class="widget white-box col-4">
+            <div class="widget-header green-header">
+                <h2>Datos de la tarea</h2>
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <p class="section-label">Nombre</p>
+                        <input type="text" name="name" placeholder="Introduce nombre" required ng-model="task.name"/>
+                        <div class="error" ng-messages="addTaskForm.name.$error" ng-if="addTaskForm.name.$dirty">
+                            <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                        </div>
+                    </li>
+                    <li ng-if="clientID">
+                        <p class="section-label">Proyecto</p>
+                        <ui-select  required ng-model="selectedProj.value"  append-to-body="true">
+                            <ui-select-match placeholder="- selecciona proyecto -">
+                                <span ng-bind="$select.selected.name"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="project in (projects | filter: $select.search) track by project.id">
+                                <span ng-bind="project.name"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </li>
+                    <li>
+                        <p class="section-label">Asignada a</p>
+                        <ui-select  required ng-model="selected.value"  append-to-body="true">
+                            <ui-select-match placeholder="- selecciona usuario -">
+                                <span ng-bind="$select.selected.username"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="user in (users | filter: $select.search) track by user.id">
+                                <span ng-bind="user.username"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="widget white-box col-8">
+            <div class="widget-header green-header">
+                <h2>Descripción de la tarea</h2>
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <p class="section-label">Descripción</p>
+                    <text-angular ng-model="task.description"></text-angular>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="widget white-box col-8">
+            <div class="widget-header green-header">
+                <h2>Horas Presupuestadas</h2>
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <p class="section-label">Horas</p>
+                        <input type="number" name="hours_budget" required ng-model="task.hours_budget" min="0" step="0.25"   />
+                        <div class="error" ng-messages="addTaskForm.hours_budget.$error" ng-if="addTaskForm.hours_budget.$dirty">
+                            <p class="error" ng-message="required">Las horas presupuestadas son obligatorias.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="widget white-box col-4">
+            <div class="widget-header green-header">
+                <h2>Estado</h2>
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <p class="section-label" ng-bind="task.status ? 'Abierta' : 'Cerrada'"></p>
+                        <button type="button" class="switch" ng-class="task.status == true ? 'active' : ''" ng-model="task.status" btn-checkbox></button>
+                        <input type="checkbox"  ng-model="task.status" />
+                    </li>   
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="widget white-box col-12">
+            <div class="widget-content">
+                <div class="botonera">               
+                    <button class="btn-material btn-primary" ng-click="addTask()" ng-disabled='addTaskForm.$invalid'>Crear</button>
+                    <a class="btn-material " ng-click="goBack();">cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

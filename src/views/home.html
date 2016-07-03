@@ -1,0 +1,80 @@
+<div class="row">
+    <div class="widget lightGreen-box col-2">
+        <div class="home-warning">
+            <span class="fa fa-calculator"></span>
+            <h2 ng-bind="invoicesCount"></h2>
+            <p>Facturas pendientes</p>
+        </div>
+    </div>
+    <div class="widget blue-box col-2">
+        <div class="home-warning">
+            <span class="fa fa-shopping-cart"></span>
+            <h2 ng-bind="ordersCount"></h2>
+            <p>Pedidos presentados</p>
+        </div>
+    </div>
+    <div class="widget red-box col-2">
+        <div class="home-warning">
+            <span class="fa fa-folder-open"></span>
+            <h2 ng-bind="projectsCount"></h2>
+            <p>Proyectos abiertos</p>
+        </div>
+    </div>
+    <div class="widget midGreen-box col-2">
+        <div class="home-warning">
+            <span class="fa fa-tasks"></span>
+            <h2 ng-bind="tasksCount"></h2>
+            <p>Tareas en curso</p>
+        </div>
+    </div>
+    
+    <div class="widget orange-box col-2">
+        <div class="home-warning">
+            <span class="fa fa-eur"></span>
+            <h2 ng-bind="invoicesSum"></h2>
+            <p>Ingresos mes</p>
+        </div>
+    </div>
+    <div class="widget purple-box col-2">
+        <div class="home-warning">
+            <span class="fa fa-eur"></span>
+            <h2 ng-bind="expensesSum"></h2>
+            <p>Gastos mes</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box col-6">
+        <div class="widget-header">
+            <div class="widget-header-menu pull-right">
+<!--                <select ng-model="projectYear" ng-change="updateProjectYear()">
+                    <option value="0">Últimos 12 meses</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                </select>-->
+                <select name="projectYear" required ng-options="item.value as item.name for item in projectYears" ng-model="projectYear" ng-change="updateProjectYear()" ng-init="projectYear = 0" >
+                </select>
+            </div>
+            <h2>Proyectos</h2>
+        </div>
+        <div class="widget-content">
+            <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" ></canvas> 
+        </div>
+        
+    </div>
+    <div class="widget white-box col-6">
+        <div class="widget-header">
+            <div class="widget-header-menu pull-right">
+                <select name="projectYear" required ng-options="item.value as item.name for item in projectYears" ng-model="InvoicesYear" ng-change="updateInvoicesYear()" ng-init="InvoicesYear = 0" >
+                </select>
+            </div>
+            <h2>Facturación</h2>
+        </div>
+        <div class="widget-content">
+            <canvas id="line" class="chart chart-line" chart-data="dataInv" chart-labels="labelsInv" chart-series="seriesInv" chart-legend="true"></canvas>
+        </div>
+        
+    </div>
+</div>
+
+    

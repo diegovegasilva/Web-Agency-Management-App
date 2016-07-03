@@ -1,0 +1,117 @@
+<form class="form edit-form" name="addProductForm" novalidate>
+    <div class="row">
+        <div class="widget white-box col-8">
+            <div class="widget-header">
+                <h2>Información del producto</h2>
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <p class="section-label">Nombre</p>
+                        <input type="text" name="name" placeholder="Introduce nombre" required ng-model="product.name"/>
+                        <div class="error" ng-messages="addProductForm.name.$error" ng-if="addProductForm.name.$dirty">
+                            <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Categoria</p>
+                        <select name="category" required ng-options="item.id as item.name for item in selectFamilies" ng-model="product.category_id">
+                            <option disabled selected value="">- selecciona categoria -</option>
+                        </select>
+                        <div class="error" ng-messages="addProductForm.category.$error" ng-if="addProductForm.category.$dirty">
+                            <p class="error" ng-message="required">Selecciona una categoría.</p>
+                        </div>
+                    </li>                    
+                    <li>
+                        <p class="section-label">Descripción</p>
+                        <textarea type="text" name="description" placeholder="Introduce descripción" ng-model="product.description"></textarea>
+                    </li>
+                    <li>
+                        <input type="checkbox" ng-model="product.active" value="{{product.active}}" ng-true-value="1" ng-false-value="0">
+                        <label class="switch-label" for="active">Activo</label>
+                        <button type="button" class="switch" ng-model="product.active" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="widget white-box col-4">
+            <div class="widget-header">
+                <h2>Imagen del producto</h2>
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <input type="file" name="file" class="btn fading" id="productFile"  ng-file-select="onFileSelect($files)" ng-model="files.url" ng-capture="'camera'" ng-hide="files === true"/>
+                        <div class="thumbnail">
+                            <img width="150" ng-src="{{url}}/{{tempFile.src}}" ng-model="tempFile.src" ng-if="tempFile.src" />
+                            <p ng-model="tempFile.name" ng-bind="tempFile.name" ng-if="tempFile.name"></p>
+                            <button class="btn btn-delete" ng-model="tempFile.id" ng-click="deleteProductImage(tempFile.id)" ng-if="tempFile.id">x</button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-sm-4"><progressbar class="progress-striped active fading" max="100" value="loading" type="success" ng-show="loading > 0 && loading < 100"><i>{{loading}}%</i></progressbar></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="widget-footer"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="widget white-box col-8">
+            <div class="widget-header">
+                <h2>Precio</h2>
+            </div>
+            <div class="widget-content">
+                <div class="inline-inputs">
+                    <label for="format">Formato</label>
+                    <label for="units">unidades</label>
+                    <label for="price">precio</label>
+                </div>
+
+                <div class="inline-inputs" ng-repeat="format in price">
+                    <input type="text" name="formatName" ng-model="format.name" placeholder="introduce nombre" required />
+                    <input type="number" name="formatUnits" ng-model="format.units" placeholder="introduce unidades" required/>
+                    <input type="text" name="formatPrice" ng-model="format.price" placeholder="introduce precio" coma-dot-converter="coma-dot-converter" required />
+                    <input type="hidden" ng-model="format.product_id" />
+                    <button class="btn btn-delete float-right" ng-click="removePrice($index)" ng-show="price.length > 1">x</button><br/>
+                </div>
+                <div class="inline-inputs txt-right">
+                    <button ng-click="addPrice()" class="btn-material btn-primary">Añadir precio</button>
+                </div>
+            </div>
+        </div>
+        <div class="widget white-box col-4">
+            <div class="widget-header">
+                <h2>IVA</h2>
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <select name="vat" required ng-options="item.id as item.vat for item in vat" ng-model="product.vat">
+                            <option disabled selected value="">- selecciona IVA -</option>                                
+                        </select>
+                        <div class="error" ng-messages="addProductForm.vat.$error" ng-if="addProductForm.vat.$dirty">
+                            <p class="error" ng-message="required">selecciona IVA.</p>
+                        </div>
+                    </li>   
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="widget white-box">
+            <div class="widget-content">
+                <div class="botonera">
+                    <a class="btn-material" ng-click="goBack();">Cancelar</a>
+                    <button class="btn-material btn-primary" ng-click="addProduct()" ng-disabled='addProductForm.$invalid'>Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

@@ -1,0 +1,84 @@
+<form class="form edit-form" name="addUserForm" novalidate>
+    <div class="row">
+        <div class="widget white-box col-8">
+            <div class="widget-header">
+                <h2>Información personal</h2>
+            </div>
+            <div class="widget-content">            
+                <ul>
+                    <li>
+                        <p class="section-label">Nombre</p>
+                        <input type="text" name="name" placeholder="Introduce nombre" required ng-model="user.username"/>
+                        <div class="error" ng-messages="addUserForm.name.$error" ng-if="addUserForm.name.$dirty">
+                            <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Contraseña</p>
+                        <input type="password" name="password" placeholder="Introduce contraseña" ng-model="user.password"/>
+                        <div class="error" ng-messages="addUserForm.password.$error" ng-if="addUserForm.password.$dirty">
+                            <p class="error" ng-message="required">La contraseña es obligatoria.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Email</p>
+                        <input type="email" name="email" placeholder="Introduce email" ng-model="user.email"/>
+                        <div class="error" ng-messages="addUserForm.email.$error" ng-if="addUserForm.email.$dirty">
+                            <p class="error" ng-message="email">Email inválido.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="section-label">Repite contraseña</p>
+                        <input type="password" name="confirm_password" placeholder="Repite contraseña" ng-model="user.passwordConfirm" required data-password-verify="user.password"/>
+                        <div class="error" ng-messages="addUserForm.confirm_password.$error" ng-if="addUserForm.confirm_password.$dirty">
+                            <p class="error" ng-message="required">La contraseña es obligatoria.</p>
+                            <p class="error" ng-message="passwordVerify">Las contraseñas no coinciden.</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <p class="section-label">Tipo de usuario</p>
+                        <select name="user-rol" required ng-options="item.id as item.userRol for item in roles" ng-model="user.userRol">
+                            <option disabled selected value="">- selecciona tipo de usuario -</option>
+                        </select>
+                        <div class="error" ng-messages="addUserForm.user-rol.$error" ng-if="addUserForm.user - rol.$dirty">
+                            <p class="error" ng-message="required">El tipo de usuario es obligatorio.</p>
+                        </div>
+                    </li>
+
+                </ul>
+                <div class="botonera">
+                    <button class="btn-material btn-primary" ng-click="addUser()" ng-disabled='addUserForm.$invalid'>crear</button>
+                </div>
+            </div>
+        </div>
+        <div class="widget white-box col-4">
+            <div class="widget-header">
+                <h2>Imágen de perfil</h2>                
+            </div>
+            <div class="widget-content">
+                <ul class="full-width">
+                    <li>
+                        <input type="file" name="file" class="btn fading" id="productFile"  ng-file-select="onFileSelect($files)" ng-model="files" ng-capture="'camera'" ng-hide="files" ng-disabled="['0', '1', '2'].indexOf(userRol) < 0"/>
+                        <div class="thumbnail">
+                            <img width="150" ng-src="{{url}}/{{tempFile.src}}" ng-model="tempFile.src" ng-if="tempFile.src" />
+                            <div class="erase-container">
+                                <p ng-model="tempFile.name" ng-bind="tempFile.name" ng-if="tempFile.name"></p>
+                                <button class="btn btn-delete" ng-click="deleteUserImage(tempFile.id)" ng-if="tempFile.name" ng-if="['0', '1', '2'].indexOf(userRol) > -1" >x</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-sm-4"><progressbar class="progress-striped active fading" max="100" value="loading" type="success" ng-show="loading > 0 && loading < 100"><i>{{loading}}%</i></progressbar></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="widget-footer"></div>
+        </div>
+    </div>
+    <div class="botonera">
+        <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+    </div>
+</form>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+

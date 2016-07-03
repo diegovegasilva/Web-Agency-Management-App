@@ -1,0 +1,6 @@
+<ul>
+        <li><a class="icon viewAll" ui-sref="productos" ng-if="state=='productosListado' || state == 'productosRootFamilias'" title="ver todos los productos"></a></li>
+        <li><a class="icon category" ui-sref="productosRootFamilias" ng-if="state=='productos'" title="ver por categorias"></a></li>
+	<li><a class="icon addProduct" ui-sref="productosCrear" title="crear producto" ng-if="['0','1','2'].indexOf(userRol) > -1"></a></li>
+	
+</ul>

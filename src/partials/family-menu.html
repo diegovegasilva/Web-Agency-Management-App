@@ -1,0 +1,32 @@
+<ul>
+	<li><a class="icon new" ng-click="addFamilia()" title="crear familia"></a></li>
+</ul>
+<script type="text/ng-template" id="myModalContent.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Añadir Categoría</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form edit-form" name="addFamilyForm" novalidate>
+			<ul>
+				<li>
+					<p class="section-label">*Nombre</p>
+					<input type="text" name="name" placeholder="Introduce nombre" required ng-model="newFamily.name"/>
+					<div class="error" ng-messages="addFamilyForm.name.$error" ng-if="addFamilyForm.name.$dirty">
+						<p class="error" ng-message="required">El nombre es obligatorio.</p>
+					</div>
+				</li>
+				<li>
+					 <p class="section-label">Familia de la que depende</p>
+					 <select name="category" ng-options="family.id as family.name for family in familias" ng-model="newFamily.category_id">
+						<option value="">categoría padre</option>
+					</select>
+				</li>
+			</ul>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn-material" ng-click="cancel()">Cancelar</button>
+		<button class="btn-material btn-primary" ng-disabled='addFamilyForm.$invalid' ng-click="add()">Guardar</button>
+	</div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

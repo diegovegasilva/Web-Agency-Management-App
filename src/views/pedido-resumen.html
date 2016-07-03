@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="widget white-box">
+        <div class="widget-header">
+            <h2>Detalle del pedido</h2>
+        </div>
+        <div class="widget-content">
+            <table class="table form">
+                <thead>
+                    <tr>
+                        <th class="align-left" style="width:35%">Nombre</th>
+                        <th class="align-left" style="width:20%">Formato</th>
+                        <th style="width:8%">Unidades</th>
+                        <th style="width:8%">Descuento</th>
+                        <th ng-if="editable" style="width:18%; min-width: 93px;" ng-if="['0', '1', '3'].indexOf(userRol) > -1">Acciones</th>
+                        <th style="width:6%">Precio</th>
+                        <th ng-if="editable" style="width:4%" ng-if="['0', '1', '3'].indexOf(userRol) > -1">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="" ng-repeat="product in products| orderBy:'name' ">
+                        <td class="align-left">
+                            <label ng-bind='product.name'></label>
+                        </td>
+                        <td class="align-left">
+                            <select class="padding-zero" ng-disabled="$index != actions.edit"  ng-if="product.format.length > 1 && product.isSelected" ng-change="updateOrder()"  ng-model="product.price" ng-options="format.id as format.name for format in product.format">
+                                <option disabled selected value="">- selecciona formato -</option>
+                            </select>
+                        </td>
+                        <td class="align-center">	
+                            <input type="number" ng-disabled="$index != actions.edit" ng-change="updateOrder()" value="1" ng-model="product.units" min="1" ng-show="product.isSelected" placeholder="uds." />
+                        </td>
+                        <td class="align-center">
+                            <input type="text" ng-if="product.showDiscount && product.isSelected == true"  name="discount" ng-change="updateOrder()" ng-pattern="/^[0-9,.%]+$/" ng-model="product.discount" coma-dot-converter="coma-dot-converter" placeholder="nº o %" ng-disabled="!editable"/>
+                        </td>
+                        <td ng-if="['0', '1', '3'].indexOf(userRol) > -1 && editable">
+                            <button type="button" class="btn edit-small" ng-if="product.isSelected == true" ng-click="actions.edit = $index" title="modificar"></button>
+                            <button type="button" class="btn discount-small" ng-if="product.isSelected == true && product.showDiscount != true" ng-click="product.showDiscount = true" title="descuento"></button>
+                            <button type="button" class="btn delete-small" ng-if="product.isSelected == true && product.showDiscount == true" ng-click="product.showDiscount = false; product.discount = '';updateOrder()" title="eliminar descuento"></button>
+                        </td>
+                        <td>
+                            <label ng-bind="product.priceVal.toFixed(2)"></label>
+                        </td>
+                        <td ng-if="['0', '1', '3'].indexOf(userRol) > -1 && editable">
+                            <button type="button" class="switch" ng-class="product.isSelected == true ? 'active' : ''" ng-model="product.isSelected" ng-change="updateOrder()" btn-checkbox></button>
+                            <input type="checkbox"  ng-change="updateOrder()" ng-model="product.isSelected" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box">
+        <div class="widget-content">
+            <div class="list-resume">
+                <div class="price">                    
+                    <p><span class="label">Precio sin IVA:</span> <span>{{totalPrice| number:2}}€</span></p>
+                    <p><span class="label">IVA:</span> <span>{{totalVat| number:2}}€</span></p>
+                    <p><span class="label">Total:</span> <span>{{totalPriceVat| number:2}}€</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+
+

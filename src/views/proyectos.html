@@ -1,0 +1,52 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Listado de proyectos <span ng-if="clientID"  ng-bind="'de ' + clientName"></span></h2>
+    </div>
+    <div class="widget-content">
+        <table class="table form">
+            <thead>
+                <tr>
+                    <th class="align-left">Finalización<a class="sort" ng-click="predicate = 'end_date'; reverse=!reverse"></a></th>
+                    <th class="align-left">Nombre<a class="sort" ng-click="predicate = 'name'; reverse=!reverse"></th>
+                    <th ng-show="!clientID" class="align-left">Cliente<a class="sort" ng-click="getProjects('client')"></th>
+                    <th>Horas presupuesto<a class="sort" ng-click="predicate = 'hours_budget'; reverse=!reverse"></th>
+                    <th>Horas consumidas<a class="sort" ng-click="predicate = 'hours_total'; reverse=!reverse"></th>
+                    <th>Estado<a class="sort" ng-click="predicate = 'status'; reverse=!reverse"></th>
+                    <th style="width:20%; min-width: 180px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='project in projects | orderBy:predicate:reverse track by project.id'>
+                    <td class="align-left"><label ng-class="dateWarning(project)" class="name" ng-bind="project.end_date | date:'dd/MM/yyyy'"></label></td>
+                    <td class="align-left"><a class="name" ng-bind="project.name" ui-sref="proyectosDetalle({projectID:project.id})"></a></td>
+                    <td ng-if="!clientID" class="align-left"><a class="name" ng-bind="project.client" title="ver cliente" ui-sref="clientesDetalle({clientID:project.client_id})"></a></td>
+                    <td><label class="name" ng-bind="project.hours_budget"></label></td>
+                    <td><label ng-class="hourWarning(project)" class="name" ng-bind="project.hours_total === null ? '0' : project.hours_total "></label></td>
+                    <td><a ng-click="changeStatus(project.id,project.status)" class="name" ng-bind="project.status == 0 ? 'cerrado' : 'abierto'" ng-class="{'closed' : project.status == 0}"></a></td>
+                    <td style="width:20%; min-width: 180px;">
+                        <a class="btn detail-small" title="editar proyecto" ui-sref="proyectosDetalle({projectID:project.id})" ></a>
+                        <a class="btn task-small" title="ver tareas" ui-sref="listadoTareas({projectID:project.id})"></a>
+                        <button type="button" class="btn delete-small" title="eliminar proyecto" ng-click="deleteProject(project.id)" ng-if="['0', '1'].indexOf(userRol) > -1"></button> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+</div>
+<script type="text/ng-template" id="deleteProjectModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+        <p>¿Estas seguro de borrar este proyecto?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn-material" ng-click="cancel()">cancelar</button>
+        <button class="btn-material btn-primary" ng-click="delete(projectID)">Borrar</button>    
+    </div>
+</script>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>

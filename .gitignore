@@ -1,3 +1,4 @@
+node_modules
 nbproject
 webservice/connection.php
 webservice/error_log.php

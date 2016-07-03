@@ -1,0 +1,30 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <h2>Añadir productos</h2>
+    </div>
+    <div class="widget-content">
+<ul ng-class="view">
+    <li class="orderProduct" ng-repeat="product in products| orderBy:'name' track by product.id">
+        <form class="form">
+            <label ng-bind='product.name' ng-model="product.isSelected" btn-checkbox></label>
+            <button type="button" class="selected" ng-class="product.isSelected == true ? 'active' : ''" ng-model="product.isSelected" btn-checkbox></button>
+            <button class="btn add-small" title="añadir producto" type="button" ng-show="product.isSelected && product.price" ng-click="product.isAdd = true; updateOrder()"></button>
+            <input type="checkbox" ng-model="product.isSelected" />
+            <input type="checkbox" ng-model="product.isAdd" />
+            <input type="number" value="1" ng-model="product.units" min="1" ng-show="product.isSelected" placeholder="uds." />
+            <select ng-if="product.format.length > 1 && product.isSelected"  ng-model="product.price" ng-options="format.id as format.name for format in product.format">
+                <option disabled selected value="">- selecciona formato -</option>
+            </select>
+        </form>
+    </li>
+     <li class="noProduct" ng-if="results < 1"><p>No hay ningún producto en esta categoría</p></li>
+</ul>
+<pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    </div>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
+
+
+

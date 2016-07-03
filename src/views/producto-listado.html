@@ -1,0 +1,24 @@
+<div class="widget white-box">
+    <div class="widget-header">
+        <div class="widget-header-menu pull-right">
+                <form class="form" ng-class="{'active': searchOn}">
+                    <!--<i class="fa fa-search"></i>-->
+                    <input id="search" type="text" ng-model="search" ng-blur="searchOn=false" set-focus="focusInput">
+                </form>
+                <a class="btn-header" ng-click="searchOn=true;focusInput=true"><i class="fa fa-search"></i></a>
+            </div>
+        <h2>Listado de productos</h2>
+    </div>
+    <div class="widget-content">
+        <ul class="list">
+            <li ng-repeat='product in products'>
+                <p><a class="name" ng-bind='product.name' ng-href="producto/{{product.id}}"></a></p>
+            </li>
+            <li class="noProduct" ng-if="results < 1"><p>No hay ningún producto en esta categoría</p></li>
+        </ul>
+    </div>
+    <pagination  ng-hide="!paginator" items-per-page="itemsPerPage" max-size="maxPages" total-items="results" previous-text="Anterior" next-text="Siguiente" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+</div>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>

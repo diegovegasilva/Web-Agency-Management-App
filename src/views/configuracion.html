@@ -1,0 +1,231 @@
+<div class="row">
+    <div class="widget white-box">
+        <div class="widget-header">
+            <h2>Datos de facturación</h2>
+        </div>
+        <div class="widget-content">
+            <div class="form edit-form" ng-if="['0', '1', '4'].indexOf(userRol) > -1">
+                <form class="form edit-form" name="addUserForm" novalidate>
+                    <ul>
+                        <li>
+                            <p class="section-label">*Nombre</p>
+                            <input type="text" name="name" placeholder="Introduce nombre" required ng-model="user.name"/>
+                            <div class="error" ng-messages="addUserForm.name.$error" ng-if="addUserForm.name.$dirty">
+                                <p class="error" ng-message="required">El nombre es obligatorio.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="section-label">*CIF</p>
+                            <input type="text" name="cif"  placeholder="Introduce CIF" ng-minlength=9 required ng-model="user.cif"/>
+                            <div class="error" ng-messages="addUserForm.cif.$error" ng-if="addUserForm.cif.$dirty">
+                                <p class="error" ng-message="minlength">CIF incorrecto.</p>
+                                <p class="error" ng-message="required">El CIF es obligatorio.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="section-label">*Email</p>
+                            <input type="email" name="email" placeholder="Introduce email" required ng-model="user.email"/>
+                            <div class="error" ng-messages="addUserForm.email.$error" ng-if="addUserForm.email.$dirty">
+                                <p class="error" ng-message="email">Email inválido.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="section-label">*Dirección</p>
+                            <input type="text" name="address" placeholder="Introduce dirección" required ng-model="user.address"/>
+                            <div class="error" ng-messages="addUserForm.address.$error" ng-if="addUserForm.address.$dirty">
+                                <p class="error" ng-message="required">La dirección es obligatoria.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="section-label">*Localidad</p>
+                            <input type="text" name="city" placeholder="Introduce localidad" required ng-model="user.city"/>
+                            <div class="error" ng-messages="addUserForm.city.$error" ng-if="addUserForm.city.$dirty">
+                                <p class="error" ng-message="required">La localidad es obligatoria.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="section-label">*Provincia</p>
+                            <select name="province" required ng-options="item.id as item.province for item in provinces" ng-model="user.province">
+                                <option disabled selected value="">- selecciona provincia -</option>
+                            </select>
+                            <div class="error" ng-messages="addUserForm.city.$error" ng-if="addUserForm.city.$dirty">
+                                <p class="error" ng-message="required">La provincia es obligatoria.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="section-label">*Código Postal</p>
+                            <input type="text" name="zip" placeholder="Introduce Código Postal" required ng-model="user.zip"/>
+                            <div class="error" ng-messages="addUserForm.zip.$error" ng-if="addUserForm.zip.$dirty">
+                                <p class="error" ng-message="required">El código postal es obligatorio.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="section-label">*Teléfono</p>
+                            <input type="tel" name="phone" ng-pattern="/^[0-9]/" placeholder="Introduce teléfono" required ng-model="user.phone"/>
+                            <div class="error" ng-messages="addUserForm.phone.$error" ng-if="addUserForm.phone.$dirty">
+                                <p class="error" ng-message="pattern">Teléfono inválido.</p>
+                                <p class="error" ng-message="required">El teléfono es obligatorio.</p>
+                            </div>
+                        </li>
+                        <li><p class="mandatory">(*) campos obligatorios</p></li>  
+                    </ul>
+                    <div class="botonera-userData">
+                        <button class="btn-material" ng-click="restoreUserData()" ng-disabled='addUserForm.$invalid || addUserForm.$pristine' >restaurar</button>
+                        <button class="btn-material btn-primary" ng-click="editUserData()" ng-disabled='addUserForm.$invalid || addUserForm.$pristine'>modificar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" ng-if="['0', '1', '2'].indexOf(userRol) > -1">
+    <div class="widget white-box col-12">
+        <div class="widget-header">
+            <h2>Logo para facturas</h2>
+        </div>
+        <div class="widget-content">
+            <ul class="config-container">
+                <li>
+                    <input type="file" name="file" class="fading" id="productFile"  ng-file-select="onFileSelect($files)" ng-model="files" ng-capture="'camera'" ng-hide="files" ng-disabled="['0', '1', '2'].indexOf(userRol) < 0"/>
+                    <div class="thumbnail">
+                        <img ng-src="{{url}}/{{tempFile.src}}" ng-model="tempFile.src" ng-if="tempFile.src" />
+                        <div class="erase-container">
+                            <p ng-model="tempFile.name" ng-bind="tempFile.name" ng-if="tempFile.name"></p>
+                            <button class="btn btn-delete" ng-click="deleteInvoiceImage()" ng-if="tempFile.name"  >x</button>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="col-sm-4"><progressbar class="progress-striped active fading" max="100" value="loading" type="success" ng-show="loading > 0 && loading < 100"><i>{{loading}}%</i></progressbar></div>
+                </li>
+            </ul>
+        </div>
+        <div class="widget-footer"></div>
+    </div>
+    <div class="widget white-box col-12">
+        <div class="widget-header">
+            <h2>IVA</h2>
+        </div>
+        <div class="widget-content">
+            <ul class="config-container">
+                <li>
+                    <div class="form">
+                        <ul class="config-section">
+                            <li ng-repeat="iva in vats">
+                                <label class="name" ng-bind="'IVA ' + iva.vat + '%'"></label> <button class="btn btn-delete" ng-click="deleteVat(iva.id)">x</button>
+                            </li>
+                        </ul>
+                        
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="widget-footer">
+            <button ng-click="addVat()" class="btn-material btn-primary addVat">Añadir IVA</button>            
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="widget white-box col-12">
+        <div class="widget-header">
+            <h2>Vista por defecto</h2>
+        </div>
+        <div class="widget-content">
+            <ul class="config-container">
+                <li>
+                    <div class="radio-config form">
+                        <ul>
+                            <li>
+                                <input type="radio" name="defaultView" value="list" ng-change="changeDefaultView()" ng-model="defaultView">
+                                <label for="defaultView">lista</label>
+                            </li>
+                            <li> 
+                                <input type="radio" name="defaultView" value="grid" ng-change="changeDefaultView()" ng-model="defaultView">
+                                <label for="defaultView">rejilla</label>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="widget white-box col-12">
+        <div class="widget-header">
+            <h2>Modo de pedidos</h2>
+        </div>
+        <div class="widget-content">
+            <ul class="config-container">
+                <li>
+                    <div class="radio-config form">
+                        <ul>
+                            <li>
+                                <input type="radio" name="productMode" value="byCategory" ng-change="changeProductMode()" ng-model="productMode">
+                                <label for="defaultView">por categorias</label>
+                            </li>
+                            <li> 
+                                <input type="radio" name="productMode" value="byProduct" ng-change="changeProductMode()" ng-model="productMode">
+                                <label for="defaultView">todos los productos</label>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+<script type="text/ng-template" id="deleteVatModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar este IVA?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-click="delete(vatID)">Borrar</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="addVatModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Añadir IVA</h3>
+    </div>
+    <div class="modal-body">
+    <form class="form edit-form" name="addVatForm" novalidate>
+    <ul>
+    <li>
+    <p class="section-label">Valor IVA</p>
+    <input type="number" name="valor" placeholder="Introduce IVA" required ng-model="iva.valor"/>
+    <div class="error" ng-messages="editFamilyForm.valor.$error" ng-if="editFamilyForm.valor.$dirty">
+    <p class="error" ng-message="required">El valor es obligatorio.</p>
+    </div>
+    </li>
+    </ul>
+    </form>
+    </div> 
+    <div class="modal-footer">
+    <button class="btn-material btn-primary" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material" ng-disabled='addVatForm.$invalid' ng-click="add(iva)">Añadir</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="deleteImageModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Atención!!</h3>
+    </div>
+    <div class="modal-body">
+    <p>¿Estas seguro de borrar esta imagen?</p>
+    </div>
+    <div class="modal-footer">
+    <button class="btn-material" ng-click="cancel()">Cancelar</button>
+    <button class="btn-material btn-primary" ng-click="deleteImage()">Borrar</button>
+    
+    </div>
+</script>
+<div class="botonera">
+    <a class="btn-material btn-volver" ng-click="goBack();">volver</a>
+</div>
