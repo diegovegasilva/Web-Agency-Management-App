@@ -815,6 +815,16 @@
                                     }]
                                 }
                             },
+                            "subMenuView": {
+                                templateUrl: "partials/task-detail-menu.html",
+                                controller: 'DetailTaskController',
+                                resolve: {
+                                    resolveTask: ['ProjectsService', '$stateParams', function (ProjectsService, $stateParams) {
+                                        var taskID = $stateParams.taskID;
+                                        return ProjectsService.getTask(taskID);
+                                    }]
+                                }
+                            }
                         },
                         data: {
                             requireLogin: true,
