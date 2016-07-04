@@ -460,7 +460,7 @@
             }            
         };
         
-        $scope.insertTime = function() {
+        $scope.insertTime = function(reload) {
             $scope.modalInstance = $modal.open({
                 templateUrl: 'inserTimeModal.html',
                 scope: $scope,
@@ -475,7 +475,11 @@
                     $scope.modalInstance.dismiss();
                     $scope.alerts = [{type: 'success', msg: 'Horas apuntadas.'}];
                     $timeout($scope.closeAlert, 1000);
-                    $scope.getTaskTime();
+                    if(!reload){
+                        $scope.getTaskTime();
+                    }else{
+                        $state.go($state.current, {}, {reload: true});
+                    }
                 });
             };
         };

@@ -2511,7 +2511,7 @@ ON config_data.province = provinces.id";
             $this->response('', 401);
         }
         $taskID = $this->_request['id'];
-        $query = "SELECT time_tasks.*, user_images.url, users.username FROM time_tasks LEFT JOIN user_images ON time_tasks.user = user_images.user_id LEFT JOIN users as users ON time_tasks.user = users.id WHERE task_id = $taskID";
+        $query = "SELECT time_tasks.*, user_images.url, users.username FROM time_tasks LEFT JOIN user_images ON time_tasks.user = user_images.user_id LEFT JOIN users as users ON time_tasks.user = users.id WHERE task_id = $taskID ORDER BY date, id DESC";
 
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
         if ($r->num_rows > 0) {
