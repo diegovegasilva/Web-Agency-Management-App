@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('inputEnable', []);
-    app.directive('inputEnable', function ($rootScope) {
+    app.directive('inputEnable',['$rootScope' ,function ($rootScope) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
@@ -16,5 +16,5 @@
                 }
             }
         };
-    });
+    }]);
 })();

@@ -155,10 +155,10 @@
                                 templateUrl: "views/cliente-detalle.html",
                                 controller: 'DetailClientsController',
                                 resolve: {
-                                    resolveClient: function (ClientsService, $stateParams) {
+                                    resolveClient: ['ClientsService', '$stateParams' ,function (ClientsService, $stateParams) {
                                         var clientID = $stateParams.clientID;
                                         return ClientsService.getClient(clientID);
-                                    }
+                                    }]
                                 }
                             },
                             "subMenuView": {
@@ -252,18 +252,18 @@
                                 templateUrl: "views/producto-detalle.html",
                                 controller: 'ProductsDetailController',
                                 resolve: {
-                                    resolveProduct: function (ProductsService, $stateParams) {
+                                    resolveProduct:['ProductsService', '$stateParams', function (ProductsService, $stateParams) {
                                         var productID = $stateParams.productID;
                                         return ProductsService.getProduct(productID);
-                                    },
-                                    resolvePrice: function (ProductsService, $stateParams) {
+                                    }],
+                                    resolvePrice:['ProductsService', '$stateParams', function (ProductsService, $stateParams) {
                                         var productID = $stateParams.productID;
                                         return ProductsService.getProductPrice(productID);
-                                    },
-                                    resolveProductImage: function (ProductsService, $stateParams) {
+                                    }],
+                                    resolveProductImage:['ProductsService', '$stateParams', function (ProductsService, $stateParams) {
                                         var productID = $stateParams.productID;
                                         return ProductsService.getProductImage(productID);
-                                    }
+                                    }]
                                 }
                             }
                         },
@@ -551,10 +551,10 @@
                                 templateUrl: "views/gastos-detalle.html",
                                 controller: 'ListExpensesController',
                                 resolve: {
-                                    resolveExpenses: function (ExpensesService, $stateParams) {
+                                    resolveExpenses:['ExpensesService', '$stateParams', function (ExpensesService, $stateParams) {
                                         var expensesID = $stateParams.expensesID;
                                         return ExpensesService.getExpenses(expensesID);
-                                    }
+                                    }]
                                 }
                             }
                         },
@@ -605,10 +605,10 @@
                                 templateUrl: "views/usuario-detalle.html",
                                 controller: 'DetailUsersController',
                                 resolve: {
-                                    resolveUser: function (UsersService, $stateParams) {
+                                    resolveUser:['UsersService', '$stateParams', function (UsersService, $stateParams) {
                                         var userID = $stateParams.userID;
                                         return UsersService.getUser(userID);
-                                    }
+                                    }]
                                 }
                             }
                         },
@@ -641,10 +641,10 @@
                                 templateUrl: "views/usuario-detalle.html",
                                 controller: 'DetailUserController',
                                 resolve: {
-                                    resolveUser: function (UsersService, $stateParams) {
+                                    resolveUser: ['UsersService', '$stateParams', function (UsersService, $stateParams) {
                                         var userID = $stateParams.userID;
                                         return UsersService.getUser(userID);
-                                    }
+                                    }]
                                 }
                             }
                         },
@@ -695,20 +695,20 @@
                                 templateUrl: "views/proyecto-detalle.html",
                                 controller: 'DetailProjectsController',
                                 resolve: {
-                                    resolveProject: function (ProjectsService, $stateParams) {
+                                    resolveProject: ['ProjectsService', '$stateParams', function (ProjectsService, $stateParams) {
                                         var projectID = $stateParams.projectID;
                                         return ProjectsService.getProject(projectID);
-                                    }
+                                    }]
                                 }
                             },
                             "subMenuView": {
                                 templateUrl: "partials/project-detail-menu.html",
                                 controller: 'DetailProjectsController',
                                 resolve: {
-                                    resolveProject: function (ProjectsService, $stateParams) {
+                                    resolveProject: ['ProjectsService', '$stateParams', function (ProjectsService, $stateParams) {
                                         var projectID = $stateParams.projectID;
                                         return ProjectsService.getProject(projectID);
-                                    }
+                                    }]
                                 }
                             }
                         },
@@ -809,14 +809,12 @@
                                 templateUrl: "views/tarea-detalle.html",
                                 controller: 'DetailTaskController',
                                 resolve: {
-                                    resolveTask: function (ProjectsService, $stateParams) {
+                                    resolveTask: ['ProjectsService', '$stateParams',function (ProjectsService, $stateParams) {
                                         var taskID = $stateParams.taskID;
                                         return ProjectsService.getTask(taskID);
-                                    }
+                                    }]
                                 }
                             },
-                            "subMenuView": {
-                            }
                         },
                         data: {
                             requireLogin: true,
