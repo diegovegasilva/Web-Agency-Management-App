@@ -119,6 +119,7 @@
                 </tr>
             </tfoot>
         </table>
+        <p ng-if="invoice.payment_method == 3" class="bankAccount" ng-bind="'nº. cuenta: '+userData.bankAccount"></p>
         <p class="observaciones">plazo {{invoice.installment_num}} de {{invoice.installments}} ({{percentage*100}}% del total)</p>
     </div>
 </div>

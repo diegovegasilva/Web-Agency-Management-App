@@ -881,7 +881,6 @@
             } else if (dif < 0) {
                 $scope.invoice.installmentBase = (Math.floor((($scope.invoice.total - $scope.invoice.vat) * $scope.percentage) * 100) / 100).toFixed(2);
             }
-            console.log($scope.invoice);
 
             OrdersService.getOrderLines($scope.invoice.order_id).then(function (data) {
                 $scope.products = data.data;

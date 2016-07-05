@@ -778,7 +778,17 @@ td.align-center input {
     font-size: 16px;
 }
 
-.table-invoice + p.observaciones {
+.table-invoice + p.bankAccount {
+    font-size: 11px;
+    font-weight: 500;
+    color: #656565;
+    text-align: left;
+    text-transform: uppercase;
+    float: left;
+}
+
+.table-invoice + p.observaciones,
+.table-invoice + p + p.observaciones {
     font-size: 11px;
     font-weight: 500;
     color: #656565;

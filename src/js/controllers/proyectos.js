@@ -51,9 +51,9 @@
         };
 
         $scope.hourWarning = function(project){
-            if(project.hours_total > project.hours_budget){                
+            if(parseFloat(project.hours_total) > parseFloat(project.hours_budget)){  
                 return 'label-danger';
-            }else if(project.hours_total < project.hours_budget && project.hours_total - (project.hours_total/10) <= project.hours_budget && project.hours_total > project.hours_budget - (project.hours_budget/10)){
+            }else if(parseFloat(project.hours_total) < parseFloat(project.hours_budget) && parseFloat(project.hours_total) - (parseFloat(project.hours_total/10)) <= parseFloat(project.hours_budget) && parseFloat(project.hours_total) > parseFloat(project.hours_budget) - (parseFloat(project.hours_budget/10))){
                return 'label-warning'; 
             }else{
                return 'label-standart';

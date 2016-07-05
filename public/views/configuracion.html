@@ -67,6 +67,13 @@
                                 <p class="error" ng-message="required">El teléfono es obligatorio.</p>
                             </div>
                         </li>
+                        <li>
+                            <p class="section-label">*Cuenta Bancaria</p>
+                            <input type="text" name="bankAccount" placeholder="Introduce cuenta bancaria" required ng-model="user.bankAccount"/>
+                            <div class="error" ng-messages="addUserForm.bankAccount.$error" ng-if="addUserForm.bankAccount.$dirty">
+                                <p class="error" ng-message="required">La cuenta bancaria es obligatoria.</p>
+                            </div>
+                        </li>
                         <li><p class="mandatory">(*) campos obligatorios</p></li>  
                     </ul>
                     <div class="botonera-userData">

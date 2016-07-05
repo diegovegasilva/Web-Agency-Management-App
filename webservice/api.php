@@ -1536,7 +1536,7 @@ ON config_data.province = provinces.id";
             $this->response('', 401);
         }
         $user = json_decode(file_get_contents("php://input"), true);
-        $column_names = array('name', 'email', 'address', 'cif', 'contact', 'phone', 'province', 'city', 'zip');
+        $column_names = array('name', 'email', 'address', 'cif', 'phone', 'province', 'city', 'zip','bankAccount');
         $keys = array_keys($user);
         $columns = '';
         $values = '';
@@ -1551,7 +1551,7 @@ ON config_data.province = provinces.id";
         $query = "UPDATE config_data SET " . trim($columns, ',') . "";
         if (!empty($user)) {
             $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
-            $success = array('status' => 1, "msg" => "Usuario " . $id . " editado correctamente.", "data" => $user);
+            $success = array('status' => 1, "msg" => "Usuario " . $id . " editado correctamente.", "data" => $query);
             $this->response($this->json($success), 200);
         } else
             $this->response('', 204); // "No Content" status*/
